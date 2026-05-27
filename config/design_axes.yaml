@@ -1,0 +1,44 @@
+# config/design_axes.yaml
+#
+# Structured design space for the creativizer.
+# Each run, the creativizer samples k non-overlapping combinations from these axes
+# to ensure structural diversity across candidates.
+#
+# Add / modify axes and values to fit your brand or creative direction.
+
+layout:
+  - "hero-left text-right split, 40/60 ratio"
+  - "full-width stacked editorial, single column"
+  - "grid mosaic, 3-column asymmetric"
+  - "magazine-style, oversized type with breakout image"
+  - "data-first dashboard layout, KPI callouts top"
+
+color_mood:
+  - "clinical cool: navy #1A2B6B + white + ice blue accent"
+  - "warm credibility: deep burgundy + warm off-white + gold"
+  - "high contrast bold: near-black + electric teal accent"
+  - "soft reassurance: slate gray + sage green + cream"
+  - "scientific authority: charcoal + cobalt + silver"
+
+typography:
+  - "geometric sans (Inter/Helvetica) with extreme size contrast 48px/14px"
+  - "authoritative serif (Georgia) headline + sans body, classical editorial"
+  - "all-caps small caps headline + generous tracking + light body weight"
+  - "mixed weight drama: ultra-light 32px headline + bold 18px subhead"
+
+cta_placement:
+  - "sticky bottom bar with single CTA"
+  - "inline CTA between each major section"
+  - "hero CTA only, minimal interruption"
+  - "floating sidebar CTA at 40% scroll"
+
+information_density:
+  - "high density: data tables + footnotes + full ISI inline"
+  - "low density: one claim per section, lots of whitespace, ISI below fold"
+  - "progressive disclosure: summary cards that hint at detail"
+
+emotional_register:
+  - "empowering patient outcomes narrative"
+  - "confident scientific authority, data-led"
+  - "humanizing story-led, HCP as hero"
+  - "urgent unmet need framing"

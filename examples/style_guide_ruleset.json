@@ -1,0 +1,67 @@
+{
+  "_comment": "Style guide ruleset for the adversarial-design pipeline. Mirrors the production `design_bible.website` shape consumed by `_normalize_brand_tokens` in message_generator_from_scratch_v0_1.py. Each of the four rule-list keys maps exactly to what the code generator LLM receives as 'Brand Rules (SUPREME — NON-NEGOTIABLE)'. Populate `raw_pdf_dump` with the full PDF text; then extract/distil each rule into the four lists below. This file is passed as `--style-guide` to run_pipeline.py (wire-up TBD) and injected into the code_generator and creativizer prompts alongside the blueprint.",
+
+  "_schema_version": "1.0",
+
+  "_usage": {
+    "how_it_flows": "run_pipeline.py loads this file → its four lists are JSON-serialised and injected verbatim into the code_generator and creativizer system prompts as the 'Brand Rules' block (same slot as the production pipeline). Rules are SUPREME: they override all generic design instructions in the prompt.",
+    "rule_format": "Each rule is a plain English declarative sentence. Be specific: name hex codes, px values, font names, percentages. The LLM interprets these literally — vague rules produce vague output.",
+    "how_to_populate_from_pdf": [
+      "1. Paste the full PDF text into `raw_pdf_dump` below.",
+      "2. Run the extraction script: python scripts/extract_style_rules.py examples/style_guide_ruleset.json",
+      "   (script uses Claude to distil the PDF into the four lists; review and trim output.)",
+      "3. Alternatively, manually pull rules: read the PDF, write one declarative sentence per rule,",
+      "   place it in the correct category, commit."
+    ]
+  },
+
+  "raw_pdf_dump": "",
+
+  "design_bible": {
+    "website": {
+
+      "content_pattern_rules": [
+        "TEMPLATE — replace with real rules extracted from the brand PDF.",
+        "Example format: 'Headlines carry the primary data claim first (e.g. \\\"2× greater improvement\\\") before the endpoint name; avoid throat-clearing openers like \\\"Introducing\\\".'",
+        "Example format: 'Body copy is terse and clinical: max 2 sentences per paragraph, 12–14px, 1.5 line-height; no patient-narrative or warm conversational tone.'",
+        "Example format: 'Every efficacy statistic is followed by a superscript citation referencing the trial name and endpoint (e.g. \\\"−3.1 pts¹\\\"); citations appear inline, never footnote-only.'",
+        "Example format: 'ISI and references render at exactly 10px, #333333, clearly delimited from preceding sections by a 1px #E5E7EB divider.'",
+        "Example format: 'Single CTA only per email; CTA copy is an action verb + specific next step (e.g. \\\"Request a rep visit\\\"), never generic \\\"Learn More\\\".'",
+        "Example format: 'REMS warnings render in a visually distinct amber/yellow panel (#FFF8E1 background, #FFD54F border) immediately inside the safety section — never buried in the ISI.'"
+      ],
+
+      "color_scheme_rules": [
+        "TEMPLATE — replace with real rules extracted from the brand PDF.",
+        "Example format: 'Primary brand violet #4B2D8F used for section headlines (H1, H2), CTA button background, data callout numerals, and accent borders; never use as body text color on white.'",
+        "Example format: 'Secondary accent: light violet tint #F5F1FC for data callout cell backgrounds and panel fills; use alongside white to create hierarchy without competing with headline violet.'",
+        "Example format: 'Border and divider color: #D8C9F0 (soft violet-grey) for callout cell borders and section dividers; never use black or dark grey borders.'",
+        "Example format: 'Body text: #222222 on white backgrounds; #FFFFFF on violet (#4B2D8F) backgrounds. Never use grey body text on violet — it fails accessibility contrast.'",
+        "Example format: 'REMS / warning panel: #FFF8E1 background, #FFD54F border, #7B5A00 text; this amber palette is reserved exclusively for the meningococcal REMS warning and must not be reused decoratively.'",
+        "Example format: 'CTA button: #4B2D8F background, #FFFFFF label text, 4px border-radius; hover state not applicable in email — do not add :hover rules.'"
+      ],
+
+      "design_pattern_rules": [
+        "TEMPLATE — replace with real rules extracted from the brand PDF.",
+        "Example format: 'Email max-width 600px, margin: 0 auto, single centered column; no multi-column layouts except the QMG responder row (two equal cells side-by-side).'",
+        "Example format: 'Data callout cells use display:table / display:table-cell for email-client compatibility; never CSS Grid or Flexbox in the email body.'",
+        "Example format: 'Primary efficacy section (MG-ADL) is the visual apex: largest numeral on the page (min 36px, bold 700), rendered in primary violet #4B2D8F against the lightest background; no other section may use a numeral this large.'",
+        "Example format: 'Secondary endpoint sections (QMG, PD) use the same callout pattern but at 22px numerals and #F5F1FC backgrounds — visually subordinate to the primary endpoint without being hidden.'",
+        "Example format: 'Pharmacodynamic / mechanistic section uses a left-border callout (4px solid #4B2D8F, #F5F1FC background) instead of a full-width table cell — signals supporting science, not a headline claim.'",
+        "Example format: 'Section spacing: 20px top/bottom padding per section, 1px solid #E5E7EB bottom border; no section-level drop shadows or box shadows.'",
+        "Example format: 'All images use [images_base64_N] placeholder tokens; no external URLs. Alt text is required on every <img>.'",
+        "Example format: 'Inline CSS only — no <link> stylesheets, no external fonts via @import; safe web-safe fallback stacks required (e.g. Arial, Helvetica, sans-serif).'"
+      ],
+
+      "other_rules": [
+        "TEMPLATE — replace with real rules extracted from the brand PDF.",
+        "Example format: 'Drug name on first mention per section: ULTOMIRIS® (ravulizumab-cwvz); subsequent mentions within the same section: ULTOMIRIS (no ®). Never abbreviate to \\\"ravu\\\" or omit the brand name in headline positions.'",
+        "Example format: 'Indication statement must use the exact approved text for anti-AChR antibody-positive generalized myasthenia gravis in adults; do not paraphrase the indication.'",
+        "Example format: 'Meningococcal REMS warning is mandatory in the safety section; omitting it from any email touching the safety section is a compliance failure.'",
+        "Example format: 'All numerical efficacy claims (MG-ADL −3.1, QMG −2.8, 30% responder) must carry a trial name citation superscript; placebo comparator values must appear alongside drug-arm values — neither may be presented alone.'",
+        "Example format: 'Brand sign-off is always Alexion, AstraZeneca Rare Disease; never AstraZeneca alone.'",
+        "Example format: 'P-values render as P<0.001 or P=0.005 (capital P, no space before the operator); do not write \\\"p-value\\\" or \\\"p <.001\\\".'",
+        "Example format: 'Every email must include a PI access line in the signature directing HCPs to the full Prescribing Information, including BOXED WARNING and Medication Guide.'"
+      ]
+    }
+  }
+}

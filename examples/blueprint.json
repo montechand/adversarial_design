@@ -1,0 +1,109 @@
+{
+"_comment": "Sample blueprint shaped exactly like the backend `content_blueprint` (see Backend-Server/.../message_generator_from_scratch_v0_1.py line 693 `class SectionSpec`). Synthetic Opdivo-style HCP email for adjuvant NSCLC, used only for offline pipeline testing — no real patient/marketing data.",
+"content_blueprint": [
+  {
+    "order": 1,
+    "headline": "Dear Neuromuscular Specialist,",
+    "group_ids": [],
+    "rationale": "Set a professional, targeted tone.",
+    "section_id": "greeting",
+    "copy_outline": "Brief salutation acknowledging your expertise in managing adults with anti–AChR antibody–positive generalized myasthenia gravis (gMG).",
+    "section_summary": "Simple greeting line tailored to neuromuscular specialists treating adults with generalized myasthenia gravis.",
+    "use_uploaded_image": false,
+    "clinical_fact_covered": "None; this section is purely a professional salutation."
+  },
+  {
+    "order": 2,
+    "headline": "A long-acting complement option for appropriate adults with anti‑AChR+ gMG",
+    "group_ids": [
+      "a8cadcef-c9ac-43d4-b6a1-eca1976c742f"
+    ],
+    "rationale": "Frame the brand and clinical focus upfront.",
+    "section_id": "intro",
+    "copy_outline": "- Introduce ULTOMIRIS (ravulizumab‑cwvz) as an option for your adult patients with anti‑AChR antibody–positive gMG.\n- Signal that the email will focus on data for controlling the symptom journey based on a 26‑week trial.",
+    "section_summary": "Short text overview introducing ULTOMIRIS for adult patients with anti‑AChR antibody–positive gMG and the focus on symptom control.",
+    "use_uploaded_image": false,
+    "clinical_fact_covered": "ULTOMIRIS is positioned for adult patients with anti‑AChR antibody–positive gMG, with symptom control assessed over 26 weeks."
+  },
+  {
+    "order": 3,
+    "headline": "More than 2x greater MG‑ADL improvement vs placebo at Week 26",
+    "group_ids": [
+      "26554e0b-0c25-4898-9aca-e37cc6bcfc67",
+      "de94aa3f-9678-40b5-8aa8-351f645c29b9",
+      "fe2be7c6-b800-45a7-af3d-c1e25f52aa6b"
+    ],
+    "rationale": "Deliver the core MG‑ADL efficacy story.",
+    "section_id": "primary_efficacy_mg_adl",
+    "copy_outline": "- In the randomized, double‑blind, placebo‑controlled CHAMPION‑MG trial in adults with anti‑AChR+ gMG (ULTOMIRIS n=86; placebo n=89), ULTOMIRIS achieved a greater mean improvement in MG‑ADL total score at Week 26 than placebo (−3.1 vs −1.4; P<0.001), representing more than 2x greater improvement from baseline.\n- MG‑ADL improvements with ULTOMIRIS were observed as early as Week 1 and were sustained over the 26‑week treatment period, with most patients remaining on background gMG therapies.",
+    "section_summary": "Concise text summary of CHAMPION‑MG design and primary MG‑ADL efficacy results, drawing on randomized trial text and figure claims.",
+    "use_uploaded_image": false,
+    "clinical_fact_covered": "In CHAMPION‑MG, ULTOMIRIS produced statistically significant, more than 2x greater mean improvement in MG‑ADL vs placebo at Week 26, with onset by Week 1 and sustained effect through 26 weeks."
+  },
+  {
+    "order": 4,
+    "headline": "Clinician-assessed muscle strength: significant QMG improvements at 26 weeks",
+    "group_ids": [
+      "c93f973f-2c1a-4b2d-9e64-3f0662587d28",
+      "868d4de0-5dc2-4a83-9ef5-8b2f9e8f8879"
+    ],
+    "rationale": "Reinforce efficacy with clinician-assessed strength data.",
+    "section_id": "secondary_efficacy_qmg",
+    "copy_outline": "- At Week 26, ULTOMIRIS showed a greater mean improvement in QMG total score vs placebo (−2.8 vs −0.8 points; 3.5‑fold greater improvement; P<0.001), reflecting improved global muscle strength.\n- A higher proportion of ULTOMIRIS‑treated patients achieved a ≥5‑point QMG improvement at Week 26 vs placebo (30% vs 11.3%; P=0.005), with additional domain‑level QMG improvements reported as exploratory findings.",
+    "section_summary": "Brief text summary of QMG key secondary endpoint and responder analyses, based on trial text and associated figure claims.",
+    "use_uploaded_image": false,
+    "clinical_fact_covered": "ULTOMIRIS demonstrated statistically significant improvements in QMG mean change and ≥5‑point responder rates vs placebo at Week 26, with exploratory support across ocular, bulbar, and limb domains."
+  },
+  {
+    "order": 5,
+    "headline": "Immediate, complete, and sustained terminal complement C5 inhibition through 26 weeks",
+    "group_ids": [
+      "cae908df-7f94-4456-9afd-657eaba4f7c8",
+      "ca1dead6-c904-475a-b852-a69095d887b6"
+    ],
+    "rationale": "Link clinical effects to sustained C5 inhibition.",
+    "section_id": "complement_inhibition_pd",
+    "copy_outline": "- ULTOMIRIS, the first and only long‑acting complement C5 inhibitor for anti‑AChR+ gMG, achieved complete inhibition of serum free C5 (below 0.5 µg/mL) by the end of the initial infusion and maintained it through 26 weeks in all treated adults.\n- PK/PD data support weight‑based loading followed by maintenance dosing every 8 weeks, with a note that no direct efficacy or safety conclusions are drawn solely from these PK/PD analyses.",
+    "section_summary": "Short text summary of pharmacodynamic data showing ULTOMIRIS as a long‑acting C5 inhibitor achieving rapid and sustained free C5 suppression.",
+    "use_uploaded_image": false,
+    "clinical_fact_covered": "ULTOMIRIS provides rapid and sustained terminal complement inhibition through 26 weeks in all studied adult patients, supporting an every‑8‑weeks regimen."
+  },
+  {
+    "order": 6,
+    "headline": "Safety profile and meningococcal risk considerations with ULTOMIRIS",
+    "group_ids": [
+      "8a8fc67a-4200-4f5e-97e2-89ac9c7dae32",
+      "a76f6340-f275-4bbd-95f8-59093dd0c88d",
+      "83cad866-6e57-4ac5-8a95-3b249f1918cc"
+    ],
+    "rationale": "Balance efficacy with essential safety information.",
+    "section_id": "safety_overview",
+    "copy_outline": "- In adults with gMG receiving ULTOMIRIS across the randomized and open‑label periods, adverse reactions reported in ≥10% of patients included diarrhea and upper respiratory tract infection; serious adverse reactions occurred in 23% vs 16% with placebo, with infections the most common serious events, including a fatal case of COVID‑19 pneumonia and one infection leading to discontinuation.\n- Because complement inhibition increases susceptibility to Neisseria meningitidis, ULTOMIRIS carries a risk of serious, potentially life‑threatening meningococcal infections and is available only through a REMS program requiring prescriber and patient enrollment.",
+    "section_summary": "Brief safety overview using tabular adverse reaction data and text describing common ARs, serious AEs, and REMS requirements for meningococcal risk.",
+    "use_uploaded_image": false,
+    "clinical_fact_covered": "Key safety findings include common ARs ≥10%, serious AEs (notably infections), and the boxed meningococcal infection risk managed via a REMS program."
+  },
+  {
+    "order": 7,
+    "headline": "Discuss CHAMPION‑MG data and real-world use with an ULTOMIRIS representative",
+    "group_ids": [],
+    "rationale": "Drive follow-up discussion and education.",
+    "section_id": "cta_button",
+    "copy_outline": "- CTA button copy: “Request a rep visit / speaker program info”.",
+    "section_summary": "Clear call-to-action directing HCPs to request a representative visit or speaker program information.",
+    "use_uploaded_image": false,
+    "clinical_fact_covered": "None; this section focuses solely on prompting further engagement."
+  },
+  {
+    "order": 8,
+    "headline": "Sincerely,",
+    "group_ids": [],
+    "rationale": "Provide a clear, compliant closeout.",
+    "section_id": "signature",
+    "copy_outline": "Signature from Alexion, AstraZeneca Rare Disease, with a reminder that full Prescribing Information, including Boxed WARNING and Medication Guide, is available via the ULTOMIRIS gMG HCP website.",
+    "section_summary": "Brief closing and brand signature line.",
+    "use_uploaded_image": false,
+    "clinical_fact_covered": "Directs HCPs to full Prescribing Information for comprehensive safety and dosing details."
+  }
+]
+}

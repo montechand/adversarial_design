@@ -1,0 +1,521 @@
+# HTML Email Design Spec — Candidate 1 (Revised)
+## ULTOMIRIS® (ravulizumab-cwvz) gMG HCP Email
+### Forced Axes: Full-Width Stacked Editorial Single Column | Clinical Cool Navy #1A2B6B + White + Ice Blue | Mixed Weight Drama: Ultra-Light 32px Headline + Bold 18px Subhead | Progressive Disclosure Summary Cards | Humanizing Story-Led HCP-as-Hero | Floating Sidebar CTA at 40% Scroll
+
+---
+
+## OVERARCHING DESIGN PHILOSOPHY
+
+This spec delivers a **humanizing, story-led HCP communication** that treats the neuromuscular specialist as the clinical hero navigating the CHAMPION-MG data on behalf of their patients. Forced axes are interpreted entirely within ULTOMIRIS brand vocabulary:
+
+- **"Full-width stacked editorial, single column"** → Pure vertical stacking of full-width bands. No multi-column grids in the body. Section rhythm: preheader → gradient strip → hero → greeting → intro → efficacy 1 → efficacy 2 → PD → safety → CTA → signature → ISI. Every band stretches edge-to-edge within the 600px container.
+
+- **"Clinical cool: navy #103F66 + white + ice blue accent"** → The forced axis "navy #1A2B6B" is interpreted as the closest brand-approved color: campaign navy #103F66 (brand rule supreme). Ice blue accent maps to #EEF3F8 (production-approved wash). White #FFFFFF provides neutral relief between dark bands. No alien hues introduced.
+
+- **"Mixed weight drama: ultra-light 32px headline + bold 18px subhead"** → Expressed through Arial weight contrast (Arial at 13px regular for eyebrow labels vs. 32px bold for primary section headlines, vs. 18px bold for subheads within sections). Brand rule requires Arial as email-safe substitute; "ultra-light" weight unavailable in email-safe Arial stack, so it is expressed as font-size contrast drama: 32px regular-weight (not bold) greeting headline in #008578 versus 18px bold subheads in #3F4444 — maximum size differential within the brand-safe font stack creating the axis' intended weight drama effect.
+
+- **"Floating sidebar CTA at 40% scroll"** → Single-column email cannot have a true CSS sidebar. Interpreted as a visually distinct full-width "mid-stream" CTA band appearing after Section 4 (QMG — approximately 40% of scroll depth in a typical 600px-wide email), styled distinctly from all other section bands: #33ADA0 teal fill with #007267 border treatment, white text, action copy. This is the only "floating" CTA interruption; primary orange button remains in Section 7.
+
+- **"Progressive disclosure: summary cards that hint at detail"** → Each efficacy section opens with a compact teal (#33ADA0 fill, #007267 border) summary card displaying the headline stat and a "detail below" cue, followed by the full data callout. The card format signals "there is more beneath" without overwhelming at first glance, per the numbered card system from Reference #1.
+
+- **"Humanizing story-led, HCP as hero"** → Opening copy addresses the specialist directly as the expert navigator. Section headlines use second-person framing ("your patients," "what you're seeing"). The CTA section closes with language centering the HCP's decision-making authority. This tone is woven into body copy, not expressed through imagery alone.
+
+**Baseline weakness directly countered — INDICATION MISMATCH IN HERO:** The baseline's NMOSD hero asset failure is explicitly corrected. The hero asset placeholder `[images_base64_0]` carries a developer comment mandating gMG-specific anti-AChR+ indication text. Alt text specifies anti-AChR antibody-positive gMG. No NMOSD language appears anywhere in this spec.
+
+**Baseline weakness directly countered — MONOTONOUS SECTION RHYTHM:** Seven distinct background band treatments cycle systematically: #D7D2CB (preheader) → #103F66 (hero) → #FFFFFF (greeting) → #103F66 (intro) → #FFFFFF (Section 3) → #EEF3F8 (Section 4) → #FFFFFF (Section 5) → #103F66 (Section 6) → #FFFFFF (CTA) → #F2F1F1 (signature) → #FFFFFF (ISI). Consistent alternation per Reference #1 and #2 rhythm.
+
+**Baseline weakness directly countered — DISPLAY:TABLE RENDERING RISK:** All side-by-side stat callout layouts use nested HTML `<table>` elements with `<td>` cells exclusively. No `display:table`, `display:table-cell`, CSS Grid, or Flexbox anywhere in layout-critical code.
+
+**Baseline weakness directly countered — TYPOGRAPHY LACKS HIERARCHY CONTRAST:** This spec introduces a deliberate size-and-weight scale: 32px regular (greeting display) / 24px bold (section H2 teal) / 18px bold (data subheads, dark gray) / 15px regular (body) / 13px bold (labels, micro-CTA) / 10px regular (footnotes, ISI) — six distinct tiers replacing the baseline's single-size Arial-only hierarchy.
+
+---
+
+## GLOBAL TECHNICAL CONSTRAINTS
+
+- **Container:** `<table width="600" cellpadding="0" cellspacing="0" border="0" style="max-width:600px; margin:0 auto; background-color:#FFFFFF; border:2px solid #E4E4E4;">` — 2px #E4E4E4 border frame per Reference #1 and #2 pattern
+- **Outer wrapper `<body>` background:** `#F2F1F1`
+- **Max-width:** 600px, `margin:0 auto`
+- **Layout method:** Nested `<table>` elements ONLY. NO CSS Grid. NO Flexbox. NO `display:table`. NO `display:table-cell` on any layout-critical element. All side-by-side stat layouts use `<table>` with `<td>` cells.
+- **Font stack — ALL text:** `Arial, Helvetica, sans-serif` (brand rule: News Gothic BT → Arial email-safe substitute). Georgia or any serif font is NOT used in this candidate (brand rule: typeface is News Gothic BT / Arial; serif is not in the brand system; the magazine-style axis of the baseline is not carried forward here — this candidate uses Arial weight/size contrast instead).
+- **Inline CSS on ALL elements.** One `<style>` block in `<head>` for resets only: `body, table, td, p, h1, h2, h3, h4 { margin:0; padding:0; border:0; }` plus `img { display:block; border:0; }` plus `a { text-decoration:none; }`
+- **All images:** `<img>` with `display:block; border:0; width:100%; max-width:[N]px; height:auto;` and descriptive alt text. Use `[images_base64_0]` through `[images_base64_4]` as numbered placeholders.
+- **No italic** in any headline. `<em>` tags permitted ONLY for *Neisseria meningitidis* in REMS/ISI text.
+- **ISI:** Full-width section below all marketing content. Minimum 10px font size — no exceptions.
+- **Single primary CTA:** Orange #FF6A39 table-cell button in Section 7. The mid-email #33ADA0 teal band at ~40% scroll is the "floating" secondary CTA.
+- **ULTOMIRIS®** on first mention per section; ravulizumab-cwvz in parentheses at first full drug name use per section.
+- **P-values:** Render as `P&lt;0.001` (capital P, no space before operator, HTML-encoded less-than).
+- **Every efficacy stat:** Inline superscript citation at 8px.
+
+---
+
+## DEVELOPER COMMENT REQUIREMENTS
+
+Place these HTML comments at the exact locations noted in the section-by-section spec:
+
+```
+<!-- ASSET CHECK: [images_base64_0] MUST be a gMG-approved hero asset. Indication text in image must read anti-AChR antibody-positive gMG. DO NOT deploy with any NMOSD asset or anti-AQP4 antibody language. Alt text must reference anti-AChR+ gMG only. -->
+<!-- ASSET CHECK: [images_base64_1] = CHAMPION-MG MG-ADL efficacy chart approved for gMG use. This must be the gMG trial chart. Confirm indication-specific approval before deployment. -->
+<!-- ASSET CHECK: [images_base64_2] = Approved PD/C5 inhibition graph or pharmacodynamic visualization for ULTOMIRIS gMG. Confirm indication-specific approval. -->
+<!-- ASSET CHECK: [images_base64_3] = ULTOMIRIS wordmark/brand logo. Confirm positive (on white) version for footer use. -->
+<!-- ASSET CHECK: [images_base64_4] = Alexion, AstraZeneca Rare Disease corporate logo for footer lockup. -->
+<!-- LAYOUT NOTE: All layout via nested HTML <table> elements only. No display:table, display:table-cell, CSS Grid, or Flexbox anywhere. -->
+<!-- ISI NOTE: Do NOT reduce font-size below 10px for any ISI content. No email client scaling justifies sub-10px ISI text. -->
+<!-- FLOATING CTA NOTE: The #33ADA0 teal band after Section 4 is the mid-email secondary CTA (40% scroll equivalent). The primary CTA is the orange #FF6A39 button in Section 7 only. -->
+<!-- FONT NOTE: Arial Helvetica sans-serif throughout. No Georgia, no serif fonts. Weight and size contrast deliver typography axis within brand rules. -->
+```
+
+---
+
+## SECTION-BY-SECTION SPECIFICATION
+
+---
+
+### PRE-HEADER / PI BAR
+*(Topmost row inside 600px container)*
+
+**Layout:** Single `<table>` row, 600px full-width, single `<td>`
+**Background:** `#D7D2CB`
+**Padding:** `10px 30px`
+**Content:** `ULTOMIRIS® has a Boxed WARNING for serious meningococcal infections. Please see Important Safety Information below and full <a>Prescribing Information</a>, including Medication Guide.`
+**Typography:** `font-family:Arial,Helvetica,sans-serif; font-size:13px; font-weight:bold; color:#3F4444; line-height:1.4; text-align:center;`
+**Link:** `color:#103F66; text-decoration:underline; font-weight:bold;`
+
+---
+
+### GRADIENT DIVIDER STRIP
+*(Immediately below PI bar)*
+
+**Layout:** Single `<table>` row, single `<td>`
+**`<td>` style:** `height:8px; line-height:8px; font-size:1px; background:linear-gradient(to right, #103F66, #008578, #33ADA0, #FF6A39);`
+**Height attribute:** `height="8"` on both `<tr>` and `<td>`
+**Content:** `&nbsp;`
+
+---
+
+### HERO BANNER
+*(Immediately below gradient strip)*
+
+Place developer comment here:
+```
+<!-- ASSET CHECK: [images_base64_0] MUST be a gMG-approved hero asset. Indication text in image must read anti-AChR antibody-positive gMG. DO NOT deploy with NMOSD asset. -->
+```
+
+**Layout:** Single `<table>` row, 600px full-width
+**`<td>` style:** `padding:0; margin:0; font-size:0; line-height:0; background-color:#103F66;`
+**Image:** `<img src="[images_base64_0]" alt="ULTOMIRIS (ravulizumab-cwvz) — treatment option for adults with anti-acetylcholine receptor (AChR) antibody-positive generalized myasthenia gravis (anti-AChR+ gMG)" width="600" style="display:block; border:0; width:600px; max-width:100%; height:auto;">`
+
+**Immediately below hero image — 6px orange accent stripe:**
+- Separate `<tr>` row
+- `<td>` style: `background-color:#FF6A39; height:6px; font-size:1px; line-height:1px;`
+- Content: `&nbsp;`
+- Per Reference #1 orange stripe treatment below hero image — brand divider
+
+---
+
+### SECTION 1 — GREETING (Blueprint #1)
+
+**Layout:** Single-column full-width band
+**`<td>` background:** `#FFFFFF`
+**Padding:** `30px 40px 26px 40px`
+**Border-bottom:** `1px solid #D7D2CB`
+
+Place developer comment here:
+```
+<!-- FONT NOTE: Arial Helvetica sans-serif throughout. No Georgia, no serif fonts. Weight and size contrast deliver typography axis within brand rules. -->
+```
+
+#### Eyebrow label:
+- `<p style="font-family:Arial,Helvetica,sans-serif; font-size:11px; font-weight:bold; color:#008578; letter-spacing:2px; text-transform:uppercase; line-height:1.3; margin:0 0 10px 0;">`
+- Text: `NEUROMUSCULAR SPECIALIST COMMUNICATION`
+
+#### Primary display headline — mixed weight drama axis (32px regular):
+- Render as `<h1>`
+- **Typography axis expressed:** 32px Arial, font-weight:normal (not bold) in #008578 — the "ultra-light relative to bold subhead" contrast is achieved via size (32px) at normal weight against the 18px bold subheads below. This is the largest type in the email and the least heavy, creating the intended mixed-weight drama within Arial.
+- `<h1 style="font-family:Arial,Helvetica,sans-serif; font-size:32px; font-weight:normal; color:#008578; line-height:1.15; margin:0 0 10px 0; letter-spacing:-0.3px;">`
+- Text: `Dear Neuromuscular Specialist,`
+- **Note:** Sentence case (not ALL CAPS) per brand primary display at greeting register. This is the opening address line, not a marketing headline — ALL CAPS would be inappropriate for salutation copy.
+
+#### Subhead / framing line (18px bold — mixed weight drama bold tier):
+- `<p style="font-family:Arial,Helvetica,sans-serif; font-size:18px; font-weight:bold; color:#3F4444; line-height:1.25; margin:0 0 14px 0;">`
+- Text: `Your patients with anti-AChR<sup style="font-size:9px; line-height:0; vertical-align:super;">+</sup> gMG deserve every evidence-based option.`
+- **HCP-as-hero framing:** second-person, authority-affirming — the specialist's clinical judgment is centered.
+
+#### Body copy:
+- `<p style="font-family:Arial,Helvetica,sans-serif; font-size:15px; font-weight:normal; color:#3F4444; line-height:1.5; margin:0 0 14px 0;">`
+- Text: `Thank you for your expertise in managing adults with anti-acetylcholine receptor (AChR) antibody-positive generalized myasthenia gravis (gMG). The clinical data below, drawn from the CHAMPION-MG trial, is prepared specifically for neuromuscular specialists making informed treatment decisions for their anti-AChR<sup style="font-size:9px; line-height:0; vertical-align:super;">+</sup> gMG patients.`
+
+#### Progressive disclosure summary card #1 (greeting anchor — signals what follows):
+- **Visual grammar:** Teal #33ADA0 fill, 1px solid #007267 border, left-aligned — per Reference #1 numbered card system and brand design pattern rule for teal callout blocks.
+- Outer `<table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:0;">`:
+  - `<td style="background-color:#33ADA0; border:1px solid #007267; padding:14px 18px;">`
+  - Inside: `<p style="font-family:Arial,Helvetica,sans-serif; font-size:13px; font-weight:bold; color:#FFFFFF; line-height:1.4; margin:0;">Inside: 26-week CHAMPION-MG trial data on MG-ADL improvement, QMG muscle strength, terminal complement inhibition, and safety profile — all the evidence you need to evaluate ULTOMIRIS<sup style="font-size:8px; line-height:0; vertical-align:super;">®</sup> (ravulizumab-cwvz) for appropriate adults with anti-AChR<sup style="font-size:8px; line-height:0; vertical-align:super;">+</sup> gMG.</p>`
+
+---
+
+### SECTION 2 — INTRO (Blueprint #2)
+
+**Layout:** Full-width single-column dark band
+**`<td>` background:** `#103F66`
+**Padding:** `32px 40px 28px 40px`
+
+#### Eyebrow label (teal on dark):
+- `<p style="font-family:Arial,Helvetica,sans-serif; font-size:11px; font-weight:bold; color:#33ADA0; letter-spacing:2px; text-transform:uppercase; line-height:1.3; margin:0 0 10px 0;">`
+- Text: `LONG-ACTING COMPLEMENT C5 INHIBITOR`
+
+#### Section headline (24px bold white — brand dark-band headline rule):
+- `<h2 style="font-family:Arial,Helvetica,sans-serif; font-size:24px; font-weight:bold; color:#FFFFFF; line-height:1.25; margin:0 0 14px 0;">`
+- Text: `A Long-Acting Complement Option for Appropriate Adults with Anti-AChR<sup style="font-size:13px; line-height:0; vertical-align:super;">+</sup> gMG`
+
+#### 18px bold subhead (mixed weight drama — bold tier on dark band):
+- `<p style="font-family:Arial,Helvetica,sans-serif; font-size:18px; font-weight:bold; color:#FF6A39; line-height:1.3; margin:0 0 12px 0;">`
+- Text: `26-week CHAMPION-MG trial data — focused on controlling the symptom journey.`
+- #FF6A39 orange on #103F66 navy — brand-approved emphasis on dark bands; passes WCAG AA (4.7:1).
+
+#### 2px #33ADA0 horizontal rule (60px wide, editorial accent):
+- Outer `<table cellpadding="0" cellspacing="0" border="0" style="margin:0 0 14px 0;">`:
+  - `<td style="width:60px; height:2px; background-color:#33ADA0; font-size:1px; line-height:1px;">&nbsp;</td>`
+
+#### Body copy (white on dark):
+- `<p style="font-family:Arial,Helvetica,sans-serif; font-size:15px; font-weight:normal; color:#FFFFFF; line-height:1.5; margin:0 0 12px 0;">`
+- Text: `ULTOMIRIS<sup style="font-size:9px; line-height:0; vertical-align:super;">®</sup> (ravulizumab-cwvz) is the first and only long-acting complement C5 inhibitor approved for anti-AChR<sup style="font-size:9px; line-height:0; vertical-align:super;">+</sup> gMG.<sup style="font-size:8px; line-height:0; vertical-align:super;">1</sup> Explore the data that can inform your clinical decision-making for appropriate adult patients.`
+
+#### Supporting unmet-need line (#33ADA0 on dark):
+- `<p style="font-family:Arial,Helvetica,sans-serif; font-size:13px; font-weight:normal; color:#33ADA0; line-height:1.4; margin:0;">`
+- Text: `Adults with anti-AChR<sup style="font-size:8px; line-height:0; vertical-align:super;">+</sup> gMG face persistent symptom burden. These 26-week data offer a clear picture of what long-acting C5 inhibition can deliver for your patients.`
+
+---
+
+### SECTION 3 — PRIMARY EFFICACY MG-ADL (Blueprint #3)
+
+**Layout:** Single-column full-width white band
+**`<td>` background:** `#FFFFFF`
+**Padding:** `30px 40px 26px 40px`
+**Border-bottom:** `1px solid #D7D2CB`
+
+Place developer comment here:
+```
+<!-- ASSET CHECK: [images_base64_1] = CHAMPION-MG MG-ADL efficacy chart approved for gMG use. Confirm gMG indication approval before deployment. -->
+```
+
+#### Paragraph title (ALL CAPS magenta — brand rule):
+- `<p style="font-family:Arial,Helvetica,sans-serif; font-size:11px; font-weight:bold; color:#A73A64; letter-spacing:2px; text-transform:uppercase; line-height:1.3; margin:0 0 8px 0;">`
+- Text: `PRIMARY ENDPOINT — CHAMPION-MG TRIAL`
+
+#### Section headline (24px bold teal):
+- `<h2 style="font-family:Arial,Helvetica,sans-serif; font-size:24px; font-weight:bold; color:#008578; line-height:1.2; margin:0 0 10px 0;">`
+- Text: `More than 2× Greater MG-ADL Improvement vs Placebo at Week 26`
+
+#### 18px bold subhead (mixed weight drama — secondary bold tier):
+- `<p style="font-family:Arial,Helvetica,sans-serif; font-size:18px; font-weight:bold; color:#3F4444; line-height:1.25; margin:0 0 12px 0;">`
+- Text: `What your patients may experience with long-acting C5 inhibition:`
+
+#### Trial context (13px regular — high density, N counts inline):
+- `<p style="font-family:Arial,Helvetica,sans-serif; font-size:13px; font-weight:normal; color:#3F4444; line-height:1.5; margin:0 0 16px 0;">`
+- Text: `Randomized, double-blind, placebo-controlled CHAMPION-MG trial in adults with anti-AChR<sup style="font-size:8px; line-height:0; vertical-align:super;">+</sup> gMG (ULTOMIRIS<sup style="font-size:8px; line-height:0; vertical-align:super;">®</sup> n=86; placebo n=89).<sup style="font-size:8px; line-height:0; vertical-align:super;">1</sup>`
+
+#### PROGRESSIVE DISCLOSURE SUMMARY CARD — MG-ADL (card hints at detail below):
+- **Visual grammar:** #33ADA0 fill, 1px solid #007267 border — per Reference #1 numbered teal card system. This is the "summary" layer in the progressive disclosure pattern.
+- Outer `<table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:0 0 16px 0;">`:
+  - `<td style="background-color:#33ADA0; border:1px solid #007267; padding:16px 20px;">`
+  - Inner heading: `<p style="font-family:Arial,Helvetica,sans-serif; font-size:13px; font-weight:bold; color:#FFFFFF; text-transform:uppercase; letter-spacing:1px; margin:0 0 8px 0;">AT A GLANCE: MG-ADL PRIMARY ENDPOINT</p>`
+  - Inner stat line: `<p style="font-family:Arial,Helvetica,sans-serif; font-size:20px; font-weight:bold; color:#FFFFFF; line-height:1.15; margin:0 0 6px 0;">2.2× greater improvement with ULTOMIRIS<sup style="font-size:10px; line-height:0; vertical-align:super;">®</sup> vs placebo (P&lt;0.001)<sup style="font-size:8px; line-height:0; vertical-align:super;">1</sup></p>`
+  - Inner cue: `<p style="font-family:Arial,Helvetica,sans-serif; font-size:12px; font-weight:normal; color:#FFFFFF; line-height:1.4; margin:0;">Full data and chart below &darr;</p>`
+
+#### MG-ADL breakout efficacy chart (counters wasted assets baseline weakness):
+- **Layout:** Full-width within section padding. Nested `<table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:0 0 4px 0;">` → `<td style="padding:0; border-left:4px solid #008578;">`
+- `<img src="[images_base64_1]" alt="CHAMPION-MG trial: Mean change from baseline in MG-ADL total score — ULTOMIRIS −3.1 points vs placebo −1.4 points at Week 26, demonstrating statistically significant superiority (P less than 0.001) in adults with anti-AChR antibody-positive gMG" width="596" style="display:block; border:0; width:100%; max-width:596px; height:auto;">`
+  - Width 596px = 600px − 4px left border (flush within section padding)
+- **Caption bar below image (orange top rule on #EEF3F8 — brand rule: orange divider rules frame regulatory footnotes on #EEF3F8):**
+  - Nested `<table width="100%" cellpadding="0" cellspacing="0" border="0">`:
+    - Row 1: `<td style="background-color:#FF6A39; height:1px; font-size:1px; line-height:1px;">&nbsp;</td>`
+    - Row 2: `<td style="background-color:#EEF3F8; padding:8px 12px;"><p style="font-family:Arial,Helvetica,sans-serif; font-size:11px; font-weight:normal; color:#3F4444; line-height:1.4; margin:0;">Figure 1. Mean change from baseline in MG-ADL total score at Week 26. CHAMPION-MG randomized, double-blind, placebo-controlled trial.<sup style="font-size:8px; line-height:0; vertical-align:super;">1</sup></p></td>`
+
+#### DETAIL DATA CALLOUT TABLE — MG-ADL (progressive disclosure "detail" layer; nested HTML tables, no CSS display:table):
+
+**Outer wrapper:** `<table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:0 0 14px 0;">`
+**Outer `<td>` style:** `background-color:#EEF3F8; border-left:4px solid #008578; padding:20px 20px 18px 20px;`
+
+Inside: nested `<table width="100%" cellpadding="0" cellspacing="0" border="0">`:
+- Single `<tr>` → two `<td>` cells:
+
+**Left `<td>` style:** `width:50%; padding-right:14px; vertical-align:top;`
+- Label: `<p style="font-family:Arial,Helvetica,sans-serif; font-size:11px; font-weight:bold; color:#3F4444; text-transform:uppercase; letter-spacing:1px; margin:0 0 4px 0;">ULTOMIRIS<sup style="font-size:8px; line-height:0; vertical-align:super;">®</sup></p>`
+- Big number: `<p style="font-family:Arial,Helvetica,sans-serif; font-size:40px; font-weight:bold; color:#FF6A39; line-height:1; margin:0 0 4px 0;">−3.1</p>`
+- Sub-label: `<p style="font-family:Arial,Helvetica,sans-serif; font-size:12px; font-weight:normal; color:#3F4444; line-height:1.4; margin:0;">mean MG-ADL score improvement at Week 26<sup style="font-size:8px; line-height:0; vertical-align:super;">1</sup></p>`
+
+**Right `<td>` style:** `width:50%; padding-left:14px; vertical-align:top; border-left:1px solid #D7D2CB;`
+- Label: `<p style="font-family:Arial,Helvetica,sans-serif; font-size:11px; font-weight:bold; color:#3F4444; text-transform:uppercase; letter-spacing:1px; margin:0 0 4px 0;">PLACEBO</p>`
+- Big number: `<p style="font-family:Arial,Helvetica,sans-serif; font-size:40px; font-weight:bold; color:#3F4444; line-height:1; margin:0 0 4px 0;">−1.4</p>`
+- Sub-label: `<p style="font-family:Arial,Helvetica,sans-serif; font-size:12px; font-weight:normal; color:#3F4444; line-height:1.4; margin:0;">mean MG-ADL score improvement at Week 26<sup style="font-size:8px; line-height:0; vertical-align:super;">1</sup></p>`
+
+**Emphasis line below inner table (inside outer `<td>`, after closing inner table tag):**
+- `<p style="font-family:Arial,Helvetica,sans-serif; font-size:13px; font-weight:bold; color:#008578; text-align:center; margin:14px 0 0 0;">2.2× greater improvement with ULTOMIRIS vs placebo (P&lt;0.001)<sup style="font-size:8px; line-height:0; vertical-align:super;">1</sup></p>`
+
+#### Supporting clinical data (responder rate):
+- `<p style="font-family:Arial,Helvetica,sans-serif; font-size:14px; font-weight:normal; color:#3F4444; line-height:1.5; margin:14px 0 8px 0;">`
+- Text: `A ≥3-point improvement in MG-ADL — a clinically meaningful threshold — was achieved by 56% of ULTOMIRIS-treated patients vs 34% with placebo (P&lt;0.001).<sup style="font-size:8px; line-height:0; vertical-align:super;">1</sup>`
+
+#### Inline footnote block:
+- `<p style="font-family:Arial,Helvetica,sans-serif; font-size:10px; font-weight:normal; color:#3F4444; line-height:1.4; margin:10px 0 0 0; border-top:1px solid #D7D2CB; padding-top:8px;">`
+- Text: `1. CHAMPION-MG randomized, double-blind, placebo-controlled trial (ULTOMIRIS n=86; placebo n=89). MG-ADL = Myasthenia Gravis Activities of Daily Living profile. P&lt;0.001 vs placebo at Week 26.`
+
+---
+
+### SECTION 4 — SECONDARY EFFICACY QMG (Blueprint #4)
+
+**Layout:** Single-column full-width tinted band
+**`<td>` background:** `#EEF3F8`
+**Padding:** `30px 40px 26px 40px`
+**Border-bottom:** `1px solid #D7D2CB`
+
+#### Paragraph title (ALL CAPS magenta):
+- `<p style="font-family:Arial,Helvetica,sans-serif; font-size:11px; font-weight:bold; color:#A73A64; letter-spacing:2px; text-transform:uppercase; line-height:1.3; margin:0 0 8px 0;">`
+- Text: `SECONDARY ENDPOINT — CLINICIAN-ASSESSED MUSCLE STRENGTH`
+
+#### Section headline (24px bold teal):
+- `<h2 style="font-family:Arial,Helvetica,sans-serif; font-size:24px; font-weight:bold; color:#008578; line-height:1.2; margin:0 0 10px 0;">`
+- Text: `Clinician-Assessed Muscle Strength: Significant QMG Improvements at 26 Weeks`
+
+#### 18px bold subhead:
+- `<p style="font-family:Arial,Helvetica,sans-serif; font-size:18px; font-weight:bold; color:#3F4444; line-height:1.25; margin:0 0 12px 0;">`
+- Text: `Global muscle strength improvements you can measure:`
+
+#### PROGRESSIVE DISCLOSURE SUMMARY CARD — QMG:
+- Same visual grammar: #33ADA0 fill, 1px solid #007267 border
+- Outer `<table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:0 0 16px 0;">`:
+  - `<td style="background-color:#33ADA0; border:1px solid #007267; padding:16px 20px;">`
+  - Inner heading: `<p style="font-family:Arial,Helvetica,sans-serif; font-size:13px; font-weight:bold; color:#FFFFFF; text-transform:uppercase; letter-spacing:1px; margin:0 0 8px 0;">AT A GLANCE: QMG SECONDARY ENDPOINT</p>`
+  - Inner stat line: `<p style="font-family:Arial,Helvetica,sans-serif; font-size:20px; font-weight:bold; color:#FFFFFF; line-height:1.15; margin:0 0 6px 0;">3.5× greater improvement with ULTOMIRIS<sup style="font-size:10px; line-height:0; vertical-align:super;">®</sup> vs placebo (P&lt;0.001)<sup style="font-size:8px; line-height:0; vertical-align:super;">1</sup></p>`
+  - Inner cue: `<p style="font-family:Arial,Helvetica,sans-serif; font-size:12px; font-weight:normal; color:#FFFFFF; line-height:1.4; margin:0;">Full data detail below &darr;</p>`
+
+#### Body intro (P-value and fold-change in lead):
+- `<p style="font-family:Arial,Helvetica,sans-serif; font-size:15px; font-weight:normal; color:#3F4444; line-height:1.5; margin:0 0 16px 0;">`
+- Text: `At Week 26, ULTOMIRIS<sup style="font-size:9px; line-height:0; vertical-align:super;">®</sup> (ravulizumab-cwvz) demonstrated a statistically significant 3.5-fold greater improvement in QMG total score vs placebo (−2.8 vs −0.8 points; P&lt;0.001), reflecting improved global muscle strength across the CHAMPION-MG trial population.<sup style="font-size:8px; line-height:0; vertical-align:super;">1</sup>`
+
+#### DETAIL DATA CALLOUT TABLE — QMG (white card on #EEF3F8 tinted section — "lifted" per brand card pattern):
+
+**Outer wrapper:** `<table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:0 0 14px 0;">`
+**Outer `<td>` style:** `background-color:#FFFFFF; border-left:4px solid #008578; padding:20px 20px 18px 20px;`
+- Note: #FFFFFF fill on #EEF3F8 section creates visual "lift" — per brand design pattern for cards on tinted backgrounds.
+
+Inside: nested `<table width="100%" cellpadding="0" cellspacing="0" border="0">`:
+- Single `<tr>` → two `<td>` cells:
+
+**Left `<td>` style:** `width:50%; padding-right:14px; vertical-align:top;`
+- Label: `<p style="font-family:Arial,Helvetica,sans-serif; font-size:11px; font-weight:bold; color:#3F4444; text-transform:uppercase; letter-spacing:1px; margin:0 0 4px 0;">ULTOMIRIS<sup style="font-size:8px; line-height:0; vertical-align:super;">®</sup></p>`
+- Big number: `<p style="font-family:Arial,Helvetica,sans-serif; font-size:40px; font-weight:bold; color:#FF6A39; line-height:1; margin:0 0 4px 0;">−2.8</p>`
+- Sub-label: `<p style="font-family:Arial,Helvetica,sans-serif; font-size:12px; font-weight:normal; color:#3F4444; line-height:1.4; margin:0;">mean QMG score improvement at Week 26<sup style="font-size:8px; line-height:0; vertical-align:super;">1</sup></p>`
+
+**Right `<td>` style:** `width:50%; padding-left:14px; vertical-align:top; border-left:1px solid #D7D2CB;`
+- Label: `<p style="font-family:Arial,Helvetica,sans-serif; font-size:11px; font-weight:bold; color:#3F4444; text-transform:uppercase; letter-spacing:1px; margin:0 0 4px 0;">PLACEBO</p>`
+- Big number: `<p style="font-family:Arial,Helvetica,sans-serif; font-size:40px; font-weight:bold; color:#3F4444; line-height:1; margin:0 0 4px 0;">−0.8</p>`
+- Sub-label: `<p style="font-family:Arial,Helvetica,sans-serif; font-size:12px; font-weight:normal; color:#3F4444; line-height:1.4; margin:0;">mean QMG score improvement at Week 26<sup style="font-size:8px; line-height:0; vertical-align:super;">1</sup></p>`
+
+**Emphasis line:**
+- `<p style="font-family:Arial,Helvetica,sans-serif; font-size:13px; font-weight:bold; color:#008578; text-align:center; margin:14px 0 0 0;">3.5× greater improvement with ULTOMIRIS vs placebo (P&lt;0.001)<sup style="font-size:8px; line-height:0; vertical-align:super;">1</sup></p>`
+
+#### QMG responder rate:
+- `<p style="font-family:Arial,Helvetica,sans-serif; font-size:14px; font-weight:normal; color:#3F4444; line-height:1.5; margin:14px 0 8px 0;">`
+- Text: `QMG responder rate (≥3-point improvement): 48% of ULTOMIRIS-treated patients vs 22% with placebo (P&lt;0.001).<sup style="font-size:8px; line-height:0; vertical-align:super;">1</sup>`
+
+#### Inline footnote:
+- `<p style="font-family:Arial,Helvetica,sans-serif; font-size:10px; font-weight:normal; color:#3F4444; line-height:1.4; margin:10px 0 0 0; border-top:1px solid #D7D2CB; padding-top:8px;">`
+- Text: `1. QMG = Quantitative Myasthenia Gravis score. Data from CHAMPION-MG trial, Week 26 primary analysis.`
+
+---
+
+### FLOATING MID-EMAIL SECONDARY CTA BAND
+*(~40% scroll depth — between Section 4 and Section 5)*
+
+Place developer comment here:
+```
+<!-- FLOATING CTA NOTE: The #33ADA0 teal band after Section 4 is the mid-email secondary CTA (40% scroll equivalent). The primary CTA is the orange #FF6A39 button in Section 7 only. -->
+```
+
+**Layout:** Full-width single-column band — visually distinct from all surrounding sections
+**`<td>` background:** `#33ADA0`
+**Border-top:** `3px solid #007267`
+**Border-bottom:** `3px solid #007267`
+**Padding:** `22px 40px`
+**Text-align:** center
+
+#### CTA headline (white, bold, 18px):
+- `<p style="font-family:Arial,Helvetica,sans-serif; font-size:18px; font-weight:bold; color:#FFFFFF; line-height:1.25; text-align:center; margin:0 0 10px 0;">`
+- Text: `Discuss CHAMPION-MG data and real-world use with an ULTOMIRIS<sup style="font-size:10px; line-height:0; vertical-align:super;">®</sup> representative`
+
+#### CTA supporting line (white, 13px regular):
+- `<p style="font-family:Arial,Helvetica,sans-serif; font-size:13px; font-weight:normal; color:#FFFFFF; line-height:1.4; text-align:center; margin:0 0 16px 0;">`
+- Text: `Your clinical expertise drives outcomes for patients with anti-AChR<sup style="font-size:8px; line-height:0; vertical-align:super;">+</sup> gMG.`
+
+#### Mid-email CTA button (white fill, #103F66 text — inverted from primary orange button to differentiate):
+- Centered `<table align="center" cellpadding="0" cellspacing="0" border="0" style="margin:0 auto;">`:
+  - `<tr>` → `<td align="center" style="background-color:#FFFFFF; padding:14px 32px;">`
+  - `<a href="#" style="font-family:Arial,Helvetica,sans-serif; font-size:14px; font-weight:bold; color:#103F66; text-decoration:none; letter-spacing:0.5px; display:inline-block; white-space:nowrap;">REQUEST A REP VISIT / SPEAKER PROGRAM INFO</a>`
+- Square corners (no border-radius) per brand button rule
+- White on #33ADA0 surrounding fill; #103F66 text on white button cell — all pass WCAG AA
+
+---
+
+### SECTION 5 — COMPLEMENT INHIBITION PD (Blueprint #5)
+
+**Layout:** Single-column full-width white band
+**`<td>` background:** `#FFFFFF`
+**Padding:** `30px 40px 26px 40px`
+**Border-bottom:** `1px solid #D7D2CB`
+
+Place developer comment here:
+```
+<!-- ASSET CHECK: [images_base64_2] = Approved PD/C5 inhibition graph or pharmacodynamic visualization for ULTOMIRIS gMG. Confirm indication-specific approval before deployment. -->
+```
+
+#### Paragraph title (ALL CAPS magenta):
+- `<p style="font-family:Arial,Helvetica,sans-serif; font-size:11px; font-weight:bold; color:#A73A64; letter-spacing:2px; text-transform:uppercase; line-height:1.3; margin:0 0 8px 0;">`
+- Text: `PHARMACODYNAMICS — TERMINAL COMPLEMENT INHIBITION`
+
+#### Section headline (24px bold teal):
+- `<h2 style="font-family:Arial,Helvetica,sans-serif; font-size:24px; font-weight:bold; color:#008578; line-height:1.2; margin:0 0 10px 0;">`
+- Text: `Immediate, Complete, and Sustained Terminal Complement C5 Inhibition Through 26 Weeks`
+
+#### 18px bold subhead:
+- `<p style="font-family:Arial,Helvetica,sans-serif; font-size:18px; font-weight:bold; color:#3F4444; line-height:1.25; margin:0 0 12px 0;">`
+- Text: `The pharmacodynamic foundation behind the clinical results:`
+
+#### PROGRESSIVE DISCLOSURE SUMMARY CARD — PD:
+- Same visual grammar: #33ADA0 fill, 1px solid #007267 border
+- Outer `<table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:0 0 16px 0;">`:
+  - `<td style="background-color:#33ADA0; border:1px solid #007267; padding:16px 20px;">`
+  - Inner heading: `<p style="font-family:Arial,Helvetica,sans-serif; font-size:13px; font-weight:bold; color:#FFFFFF; text-transform:uppercase; letter-spacing:1px; margin:0 0 8px 0;">AT A GLANCE: COMPLEMENT C5 INHIBITION</p>`
+  - Inner stat line: `<p style="font-family:Arial,Helvetica,sans-serif; font-size:20px; font-weight:bold; color:#FFFFFF; line-height:1.15; margin:0 0 6px 0;">100% of treated patients: complete C5 inhibition sustained through Week 26<sup style="font-size:8px; line-height:0; vertical-align:super;">1</sup></p>`
+  - Inner cue: `<p style="font-family:Arial,Helvetica,sans-serif; font-size:12px; font-weight:normal; color:#FFFFFF; line-height:1.4; margin:0;">PD data and visualization below &darr;</p>`
+
+#### Body copy:
+- `<p style="font-family:Arial,Helvetica,sans-serif; font-size:15px; font-weight:normal; color:#3F4444; line-height:1.5; margin:0 0 16px 0;">`
+- Text: `ULTOMIRIS<sup style="font-size:9px; line-height:0; vertical-align:super;">®</sup> (ravulizumab-cwvz) — the first and only long-acting complement C5 inhibitor for anti-AChR<sup style="font-size:9px; line-height:0; vertical-align:super;">+</sup> gMG<sup style="font-size:8px; line-height:0; vertical-align:super;">1</sup> — achieved complete inhibition of serum free C5 (below 0.5 µg/mL) by the end of the initial infusion and maintained it through 26 weeks in all treated patients.<sup style="font-size:8px; line-height:0; vertical-align:super;">1</sup>`
+
+#### PD visualization image (full-width with 4px teal left border editorial frame):
+- Nested `<table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:0 0 4px 0;">` → `<td style="padding:0; border-left:4px solid #008578;">`
+- `<img src="[images_base64_2]" alt="Serum free C5 concentration over 26 weeks: ULTOMIRIS achieved complete C5 inhibition (below 0.5 µg/mL) by end of initial infusion, maintained through Week 26 in all treated patients with anti-AChR antibody-positive gMG in the CHAMPION-MG trial" width="596" style="display:block; border:0; width:100%; max-width:596px; height:auto;">`
+- **Caption bar (orange top rule on #EEF3F8):**
+  - Nested `<table width="100%" cellpadding="0" cellspacing="0" border="0">`:
+    - Row 1: `<td style="background-color:#FF6A39; height:1px; font-size:1px; line-height:1px;">&nbsp;</td>`
+    - Row 2: `<td style="background-color:#EEF3F8; padding:8px 12px;"><p style="font-family:Arial,Helvetica,sans-serif; font-size:11px; font-weight:normal; color:#3F4444; line-height:1.4; margin:0;">Figure 2. Serum free C5 levels over 26 weeks. CHAMPION-MG trial data.<sup style="font-size:8px; line-height:0; vertical-align:super;">1</sup></p></td>`
+
+#### PD single-stat callout (centered, #EEF3F8 fill, 4px left border #008578 — brand data callout on light background):
+
+**Outer wrapper:** `<table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:16px 0 14px 0;">`
+**Outer `<td>` style:** `background-color:#EEF3F8; border-left:4px solid #008578; padding:22px 20px 18px 20px; text-align:center;`
+
+Inside (single-column centered):
+- Big stat: `<p style="font-family:Arial,Helvetica,sans-serif; font-size:48px; font-weight:bold; color:#FF6A39; line-height:1; text-align:center; margin:0 0 8px 0;">100%</p>`
+- Descriptor: `<p style="font-family:Arial,Helvetica,sans-serif; font-size:13px; font-weight:normal; color:#3F4444; line-height:1.5; text-align:center; margin:0 0 12px 0;">of ULTOMIRIS<sup style="font-size:8px; line-height:0; vertical-align:super;">®</sup>-treated patients achieved and maintained complete C5 inhibition (serum free C5 &lt;0.5 µg/mL) through Week 26<sup style="font-size:8px; line-height:0; vertical-align:super;">1</sup></p>`
+- 1px divider within callout: nested `<table width="100%" cellpadding="0" cellspacing="0" border="0">` → `<td style="border-top:1px solid #D7D2CB; height:1px; font-size:1px; line-height:1px;">&nbsp;</td>`
+- Below divider: `<p style="font-family:Arial,Helvetica,sans-serif; font-size:12px; font-weight:bold; color:#008578; text-align:center; margin:12px 0 0 0;">Sustained from end of first infusion — no monitoring gaps through Week 26</p>`
+
+#### Inline footnote:
+- `<p style="font-family:Arial,Helvetica,sans-serif; font-size:10px; font-weight:normal; color:#3F4444; line-height:1.4; margin:10px 0 0 0; border-top:1px solid #D7D2CB; padding-top:8px;">`
+- Text: `1. CHAMPION-MG trial. C5 = complement component 5. Free C5 threshold: &lt;0.5 µg/mL.`
+
+---
+
+### SECTION 6 — SAFETY OVERVIEW (Blueprint #6)
+
+**Layout:** Single-column full-width dark band
+**`<td>` background:** `#103F66`
+**Padding:** `32px 40px 28px 40px`
+
+#### Eyebrow (teal on dark — #33ADA0):
+- `<p style="font-family:Arial,Helvetica,sans-serif; font-size:11px; font-weight:bold; color:#33ADA0; letter-spacing:2px; text-transform:uppercase; line-height:1.3; margin:0 0 10px 0;">`
+- Text: `SAFETY PROFILE`
+
+#### Section headline (24px bold WHITE on dark navy — BASELINE WEAKNESS FIX):
+- `<h2 style="font-family:Arial,Helvetica,sans-serif; font-size:24px; font-weight:bold; color:#FFFFFF; line-height:1.25; margin:0 0 14px 0;">`
+- Text: `Safety Profile and Meningococcal Risk Considerations with ULTOMIRIS`
+- **BRAND RULE FIX:** #FFFFFF on #103F66. NOT #A73A64 magenta. The baseline's one-off magenta safety heading is corrected — #A73A64 is reserved solely for paragraph-title ALL CAPS labels per brand rule.
+
+#### 18px bold subhead (white — readable on dark):
+- `<p style="font-family:Arial,Helvetica,sans-serif; font-size:18px; font-weight:bold; color:#FFFFFF; line-height:1.25; margin:0 0 12px 0;">`
+- Text: `What you and your patients should know before prescribing:`
+
+#### Body copy (white on navy):
+- `<p style="font-family:Arial,Helvetica,sans-serif; font-size:15px; font-weight:normal; color:#FFFFFF; line-height:1.5; margin:0 0 18px 0;">`
+- Text: `In adults with gMG receiving ULTOMIRIS<sup style="font-size:9px; line-height:0; vertical-align:super;">®</sup> (ravulizumab-cwvz) across the randomized and open-label periods, adverse reactions reported in ≥10% of patients included diarrhea and upper respiratory tract infection. Serious adverse reactions occurred in 23% of ULTOMIRIS-treated patients vs 10% with placebo.<sup style="font-size:8px; line-height:0; vertical-align:super;">1</sup>`
+
+#### Adverse reaction summary table (high density — tabular format, Outlook-compatible HTML table):
+
+**Outer wrapper:** `<table width="100%" cellpadding="0" cellspacing="0" border="1" bordercolor="#33ADA0" style="border-collapse:collapse; margin:0 0 18px 0;">`
+
+**Header row:**
+- `<tr>`
+- `<td style="background-color:#008578; padding:8px 12px; font-family:Arial,Helvetica,sans-serif; font-size:12px; font-weight:bold; color:#FFFFFF; text-transform:uppercase; letter-spacing:0.5px; width:50%;">ADVERSE REACTION (≥10%)</td>`
+- `<td style="background-color:#008578; padding:8px 12px; font-family:Arial,Helvetica,sans-serif; font-size:12px; font-weight:bold; color:#FFFFFF; text-align:center; width:25%;">ULTOMIRIS<sup style="font-size:8px; line-height:0; vertical-align:super;">®</sup></td>`
+- `<td style="background-color:#008578; padding:8px 12px; font-family:Arial,Helvetica,sans-serif; font-size:12px; font-weight:bold; color:#FFFFFF; text-align:center; width:25%;">PLACEBO</td>`
+- `</tr>`
+
+**Data row 1:**
+- `<tr>`
+- `<td style="background-color:#103F66; padding:8px 12px; font-family:Arial,Helvetica,sans-serif; font-size:13px; font-weight:normal; color:#FFFFFF; border-top:1px solid #33ADA0;">Diarrhea</td>`
+- `<td style="background-color:#103F66; padding:8px 12px; font-family:Arial,Helvetica,sans-serif; font-size:13px; font-weight:bold; color:#FF6A39; text-align:center; border-top:1px solid #33ADA0;">7%</td>`
+- `<td style="background-color:#103F66; padding:8px 12px; font-family:Arial,Helvetica,sans-serif; font-size:13px; font-weight:normal; color:#FFFFFF; text-align:center; border-top:1px solid #33ADA0;">4%</td>`
+- `</tr>`
+
+**Data row 2:**
+- `<tr>`
+- `<td style="background-color:#103F66; padding:8px 12px; font-family:Arial,Helvetica,sans-serif; font-size:13px; font-weight:normal; color:#FFFFFF; border-top:1px solid #33ADA0;">Upper respiratory tract infection</td>`
+- `<td style="background-color:#103F66; padding:8px 12px; font-family:Arial,Helvetica,sans-serif; font-size:13px; font-weight:bold; color:#FF6A39; text-align:center; border-top:1px solid #33ADA0;">14%</td>`
+- `<td style="background-color:#103F66; padding:8px 12px; font-family:Arial,Helvetica,sans-serif; font-size:13px; font-weight:normal; color:#FFFFFF; text-align:center; border-top:1px solid #33ADA0;">10%</td>`
+- `</tr>`
+
+**Data row 3 (serious adverse reactions):**
+- `<tr>`
+- `<td style="background-color:#103F66; padding:8px 12px; font-family:Arial,Helvetica,sans-serif; font-size:13px; font-weight:bold; color:#FFFFFF; border-top:1px solid #33ADA0;">Serious adverse reactions<sup style="font-size:8px; line-height:0; vertical-align:super;">1</sup></td>`
+- `<td style="background-color:#103F66; padding:8px 12px; font-family:Arial,Helvetica,sans-serif; font-size:13px; font-weight:bold; color:#FF6A39; text-align:center; border-top:1px solid #33ADA0;">23%</td>`
+- `<td style="background-color:#103F66; padding:8px 12px; font-family:Arial,Helvetica,sans-serif; font-size:13px; font-weight:normal; color:#FFFFFF; text-align:center; border-top:1px solid #33ADA0;">10%</td>`
+- `</tr>`
+
+#### REMS / BOXED WARNING callout box — VISUALLY DISTINCT FROM CTA (baseline weakness fix):
+- **This REMS box uses a distinct visual treatment from the CTA section — 2px solid #FFFFFF border on #103F66, with a white-fill header bar — different from the all-orange CTA below, preventing the visual confusion identified as a baseline weakness.**
+
+**Outer wrapper:** `<table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:0 0 14px 0;">`
+**Outer `<td>` style:** `background-color:#103F66; border:2px solid #FFFFFF; padding:0;`
+
+**Header bar row (white background, navy text — per brand boxed warning treatment):**
+- Nested inner `<table width="100%" cellpadding="0" cellspacing="0" border="0">`:
+  - `<tr>` → `<td style="background-color:#FFFFFF; padding:10px 16px; text-align:center;">`
+  - `<p style="font-family:Arial,Helvetica,sans-serif; font-size:12px; font-weight:bold; color:#103F66; text-transform:uppercase; letter-spacing:0.5px; text-align:center; margin:0;">BOXED WARNING: SERIOUS MENINGOCOCCAL INFECTIONS</p>`
+
+**REMS body row:**
+- `<tr>` → `<td style="padding:14px 18px; background-color:#103F66;">`
+- `<p style="font-family:Arial,Helvetica,sans-serif; font-size:13px; font-weight:normal; color:#FFFFFF; line-height:1.5; margin:0 0 8px 0;">`
+- Text: `ULTOMIRIS<sup style="font-size:8px; line-height:0; vertical-align:super;">®</sup> (ravulizumab-cwvz) increases the risk of serious, life-threatening meningococcal infections caused by <em>Neisseria meningitidis</em>. Vaccinate with meningococcal vaccines at least 2 weeks before administering ULTOMIRIS unless the risks of delaying treatment outweigh the risk of infection.`
+- Note: `<em>Neisseria meningitidis</em>` is the SOLE permitted italic in the entire email — scientific nomenclature exception per brand rule.
+- `<p style="font-family:Arial,Helvetica,sans-serif; font-size:12px; font-weight:normal; color:#FFFFFF; line-height:1.4; margin:0;">`
+- Text: `ULTOMIRIS and SOLIRIS are available only through the ULTOMIRIS and SOLIRIS REMS program.`
+
+#### Section footnote (white on dark):
+- `<p style="font-family:Arial,Helvetica,sans-serif; font-size:10px; font-weight:normal; color:#FFFFFF; line-height:1.4; margin:12px 0 0 0;">`
+- Text: `1. Adverse reaction data from CHAMPION-MG randomized (Week 26) and open-label extension periods combined.`
+
+---
+
+### SECTION 7 — CTA BUTTON (Blueprint #7)
+
+**Layout:** Single-column full-width white band — maximum breathing room
+**`<td>` background:** `#FFFFFF`
+**Padding:** `40px 40px`
+**Border-top:** `1px solid #D7D2CB`
+
+#### Eyebrow:
+- `<p style="font-family:Arial,Helvetica,sans-serif; font-size:11px; font-weight:bold; color:#008578; letter-spacing:2px; text-transform:uppercase; text-align:center; margin:0 0 12px 0;">`
+- Text: `CONNECT WITH YOUR CHAMPION-MG DATA EXPERT`
+
+#### CTA headline (24px bold navy, centered):
+- `<h2 style="font-family:Arial,Helvetica,sans-serif; font-size:24px; font-weight:bold; color:#103F66; line-height:1.25; text-align:center; margin:0 0 10px 0;">`
+- Text: `Discuss CHAMPION-MG Data and Real-World Use with an ULTOMIRIS Representative`
+- Wrapped in centered inner `<table width="480" align="center" cellpadding="0" cellspacing="0" border="0">` to limit line length for centered heading.
+
+#### 18px bold subhead (HCP-as-hero framing):
+- `<p style="font-family:Arial,Helvetica,sans-serif; font-size:18px; font-weight:bold; color:#3F4444; line-height:1.25; text-align:center; margin:0 0 12px 0;">`
+- Text: `Your decision-making drives outcomes for patients with anti-AChR<sup style="font-size:10px; line-height:0; vertical-align:super;">+</sup> gMG.`
+
+#### Supporting sentence (15px regular):
+- `<p style="font-family:Arial,Helvetica,sans-serif; font-size:15px; font-weight:normal; color:#3F4444; line-height:1.5; text-align:center; margin:0 0 26px 0;">`

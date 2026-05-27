@@ -1,0 +1,52 @@
+# HTML Email Design Spec — Candidate 1
+## "Magazine Dispatch: HCP as Hero" — Oversized Editorial Type, Progressive Summary Cards, Near-Black + Electric Teal Accent, Floating Sidebar CTA at 40% Scroll
+
+---
+
+## CONCEPT & DIFFERENTIATION STRATEGY
+
+This spec executes a **magazine-dispatch editorial architecture** that directly counters the baseline's most damaging weakness: **monotonous section rhythm where every block uses identical headline → paragraph → tinted box → footnote cadence with no variation, causing scan fatigue**. Where the baseline repeats the same structural beat relentlessly, this design constructs genuine chapter-sense: each section is entered differently — an oversized typographic declaration, a progressive-reveal summary card with expandable visual hierarchy, a left-rail mechanistic callout, and a teal-interrupt safety aside. The HCP scanning this email encounters a structurally distinct environment every 180–220px of scroll.
+
+**The HCP-as-Hero emotional register** frames the specialist as the decisive agent in the patient journey. Subhead copy before each data block uses second-person construction ("What you saw in CHAMPION-MG...") — brief, terse, clinical — but signals that the data serves their clinical decision-making, not the brand's marketing goals. This is the confident scientific authority of a peer briefing, not a sales pitch.
+
+**Baseline Weakness Countered — No Header/Banner Region or Brand Lockup:**
+The email opens with a full-width 600px header band at 80px height: `#0F1923` (near-black) background, ULTOMIRIS® wordmark in `#FFFFFF` at 18px bold small-caps tracked, and a 3px solid electric teal `#00C2B5` bottom border. This immediately establishes brand identity and the near-black + teal color story before the HCP reads a word of copy. The greeting section sits beneath this banner on a warm `#F9F9F9` field, not dropped onto blank white.
+
+---
+
+## GLOBAL LAYOUT RULES
+
+- **Max-width:** 600px, `margin: 0 auto`, `background-color: #F2F2F2` outer wrapper
+- **Inner content column:** 600px, `background-color: #FFFFFF`
+- **Column structure:** Single column throughout (brand rule). The only two-cell row is the QMG responder stat (brand rule). The floating sidebar CTA (forced axis) is resolved as an inset two-cell breakout row using `display:table` / `display:table-cell` — left cell 340px (teaser copy), right cell 220px (CTA button panel), both within the 600px column.
+- **No CSS Grid, no Flexbox, no external fonts, no linked stylesheets.** All CSS inline.
+- **Font stack throughout:** `Arial, Helvetica, sans-serif`
+- **Images:** All images use `[images_base64_N]` placeholder tokens with required `alt=""` attributes.
+
+---
+
+## COLOR PALETTE (ALL HEX CODES FIXED)
+
+| Role | Hex | Usage |
+|---|---|---|
+| Near-black (primary structure) | `#0F1923` | Header band background, footer band background, section-entry declaration strips |
+| Electric teal (accent) | `#00C2B5` | Bottom border on header, CTA button, data callout left-border accents, teal rule between sections |
+| Brand violet (headlines, numerals) | `#4B2D8F` | All H1/H2 section headlines, primary efficacy numeral (36–42px), secondary numeral (22px) |
+| Light violet tint (panel fills) | `#F5F1FC` | Data callout cell backgrounds, PD left-border panel background |
+| Soft violet-grey (borders) | `#D8C9F0` | Callout cell borders, section dividers |
+| White (content background) | `#FFFFFF` | Main content field |
+| Near-white grey (alternating) | `#F9F9F9` | Greeting section background, signature section background |
+| Body text | `#222222` | All body copy on white/near-white backgrounds |
+| White on dark | `#FFFFFF` | Body copy on `#0F1923` backgrounds |
+| REMS amber background | `#FFF8E1` | Meningococcal REMS panel only |
+| REMS amber border | `#FFD54F` | Meningococcal REMS panel border only |
+| REMS amber text | `#7B5A00` | REMS panel body text only |
+| ISI/reference text | `#333333` | ISI block, reference footnotes |
+
+**Near-black `#0F1923` is NEVER used as body text color on white.** It is a structural/background color only. Brand violet `#4B2D8F` is NEVER used as body text on white — headlines, numerals, and accent elements only.
+
+---
+
+## TYPOGRAPHY SYSTEM
+
+### Headline Treatment (ALL-CAPS SMALL-CAPS + GENEROUS

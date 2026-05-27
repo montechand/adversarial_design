@@ -1,0 +1,70 @@
+{
+  "_comment": "ULTOMIRIS (ravulizumab-cwvz) HCP email style guide. Mirrors production `design_bible.website` shape. Primary source: ULTOMIRIS Global Brand Book (April 2023) — brand_guide_ULTOMIRIS_Brand_Book_with_SC_and_NMOSD_Updates_5.11.23.pdf. Email execution rules cross-validated against production HCP templates (examples/references/US_ULT-N_*.html). Pass via `--style-guide examples/style_guide_ruleset_ultomiris.json`.",
+
+  "_schema_version": "1.0",
+
+  "_usage": {
+    "how_it_flows": "run_pipeline.py loads this file → its four lists are JSON-serialised and injected verbatim into creativizer, code_generator, and compliance_check prompts as the 'Brand Rules (SUPREME — NON-NEGOTIABLE)' block.",
+    "rule_format": "Each rule is a plain English declarative sentence with concrete hex codes, px values, and font names.",
+    "source": "ULTOMIRIS Global Brand Book §2.10–2.15 (color palette + typography) + approved HCP email HTML references for email-safe execution."
+  },
+
+  "raw_pdf_dump": "ULTOMIRIS GLOBAL BRAND BOOK — §2.10 COLOR PALETTE (April 2023)\n\nPRIMARY COLORS (logo + promotional prominence):\n- ULTOMIRIS Turquoise: RGB 0/133/120, HEX #008578, Pantone 3282 C\n- ULTOMIRIS Magenta: RGB 167/58/100, HEX #A73A64, Pantone 7433 C\n\nSECONDARY COLORS (used with primary palette):\n- ULTOMIRIS Orange: RGB 255/106/57, HEX #FF6A39, Pantone 1645 C\n- ULTOMIRIS Light Blue: RGB 92/136/218, HEX #5C88DA, Pantone 2718 C\n- ULTOMIRIS Light Green: RGB 160/218/179, HEX #A0DAB3, Pantone 344 C\n- ULTOMIRIS Light Pink: RGB 198/87/154, HEX #C6579A, Pantone 674 C\n\nNEUTRAL COLORS:\n- ULTOMIRIS Light Gray: RGB 215/210/203, HEX #D7D2CB — text box and sidebar fills\n- ULTOMIRIS Dark Gray: RGB 63/68/68, HEX #3F4444 — headlines and body copy\n\n§2.13–2.15 TYPOGRAPHY\nPrimary typeface: News Gothic BT / News Gothic BT Condensed.\nDigital substitute (web banners, unlicensed contexts): Roboto (primary), Roboto Condensed (secondary).\nDesktop substitute (Office): Calibri.\n\nInformation hierarchy:\n- Eyebrow: News Gothic BT Condensed Regular, ULTOMIRIS Turquoise (#008578), all caps or sentence case, 0 tracking\n- Headline: News Gothic BT Condensed Bold, ALL CAPS, ULTOMIRIS Turquoise (#008578), 0 tracking\n- Subhead/callout: News Gothic BT Condensed Bold, sentence case, ULTOMIRIS Dark Gray (#3F4444), Turquoise, or Magenta (#A73A64)\n- Paragraph title: News Gothic BT Condensed Bold, ALL CAPS, ULTOMIRIS Magenta (#A73A64)\n- Body copy: News Gothic BT Roman, sentence case, ULTOMIRIS Dark Gray (#3F4444), flush left\n- Emphasis in body: News Gothic BT Bold, Dark Gray, sentence case\n- Captions (< body size): News Gothic BT Roman, Dark Gray, sentence case\n\n§2.11 TEXT CONTRAST (WCAG AA): Large text ≥18pt regular or ≥14pt bold; body text <14pt bold or <18pt regular. Approved pairings include white (#FFFFFF) on Turquoise, Orange, Magenta, and Dark Gray backgrounds.",
+
+  "design_bible": {
+    "website": {
+
+      "content_pattern_rules": [
+        "Brand typeface is News Gothic BT / News Gothic BT Condensed; for HCP email HTML use Arial, Helvetica, sans-serif as the email-safe substitute (no @font-face or external font imports).",
+        "Headlines follow brand hierarchy: eyebrow in Condensed Regular turquoise (#008578); primary headline in Condensed Bold ALL CAPS turquoise (#008578); subheads in Condensed Bold sentence case dark gray (#3F4444); paragraph titles in Condensed Bold ALL CAPS magenta (#A73A64).",
+        "Body copy is News Gothic BT Roman equivalent (Arial regular), sentence case, color #3F4444 (ULTOMIRIS Dark Gray), 14–16px, line-height 1.4–1.5, flush left; max 2–3 sentences per paragraph.",
+        "Captions and text smaller than body copy use Roman/regular weight at minimum 10px, #3F4444, sentence case — never below 10px in email.",
+        "Approved HCP email templates use dark campaign navy #103F66 for full-width hero/data bands with white (#FFFFFF) 20–26px headlines and 20px bullet body — treat as an approved email execution of the brand on dark backgrounds.",
+        "Emphasis statistics and callout phrases on light backgrounds use ULTOMIRIS Orange (#FF6A39); do not introduce additional warm accent hues.",
+        "PI pre-header bar renders centered on #F2F1F1 or #D7D2CB at 13–14px bold #3F4444, referencing ULTOMIRIS Boxed WARNING for meningococcal infections.",
+        "Every efficacy statistic carries an inline superscript citation at 8–10px; P-values render as P<0.001 (capital P, no space before operator).",
+        "ISI minimum 10px; ISI section subheads in teal #008578 or #008273; boxed WARNING uses 1px solid #000000 border.",
+        "Single primary CTA per email with action-specific copy; drug name first mention per section: ULTOMIRIS® (ravulizumab-cwvz)."
+      ],
+
+      "color_scheme_rules": [
+        "Primary brand turquoise #008578 (RGB 0/133/120) is the signature ULTOMIRIS color — use for headlines, logo-adjacent accents, ISI header bars, and eyebrow labels; white (#FFFFFF) text on turquoise backgrounds.",
+        "Primary brand magenta #A73A64 (RGB 167/58/100) is a logo primary — use for paragraph titles (ALL CAPS) and selective emphasis; never as body text color on white.",
+        "Brand orange #FF6A39 (RGB 255/106/57) is the sole warm accent for emphasis headlines, statistics, and CTA fills — use sparingly; do not pair with yellow, rose, or non-brand violets.",
+        "Secondary light blue #5C88DA, light green #A0DAB3, and light pink #C6579A may accent supporting panels — never replace the primary turquoise/orange/magenta triad in hero positions.",
+        "Neutral dark gray #3F4444 is the authoritative body and subhead text color on white and light backgrounds; neutral light gray #D7D2CB for sidebar/text-box fills and PI pre-header bars.",
+        "Approved HCP email dark bands use campaign navy #103F66 (production template color) with white type — distinct from but complementary to primary turquoise #008578.",
+        "Light exploratory section wash #EEF3F8 (production email) carries secondary content with #3F4444 body and #FF6A39 accent headlines.",
+        "Content card teal #33ADA0 with #007267 borders appears in approved email templates for rounded callout blocks on white backgrounds.",
+        "ISI header bar: #008578 background, white uppercase label; footer PI link bar: #12314B dark navy with white bold links.",
+        "Text contrast must meet WCAG AA: white on #008578, #FF6A39, #A73A64, and #3F4444 passes; never place #3F4444 body text on #FF6A39 or #A73A64 backgrounds."
+      ],
+
+      "design_pattern_rules": [
+        "Email max-width 600px, margin: 0 auto; single-column nested-table layout — no CSS Grid or Flexbox in email body.",
+        "Alternate full-width dark bands (#103F66 or #008578) with light bands (#FFFFFF, #EEF3F8, or #D7D2CB) following approved ULTOMIRIS HCP email rhythm.",
+        "Logo/brand mark in header or hero; ULTOMIRIS full-color positive logo is preferred on white; full-color reverse on dark brand backgrounds.",
+        "Section padding: 24–33px on dark hero blocks, 21–30px on light sections, 30–40px horizontal inset on major content rows.",
+        "Data callouts on dark bands: bold statistics in #FF6A39 or white with 20px supporting bullet copy; on light bands use #33ADA0 card fills with #007267 borders.",
+        "All images use [images_base64_N] placeholders; every <img> requires alt text, display:block, border:0.",
+        "Inline CSS on elements only; one <head> <style> block permitted for resets — no external stylesheets.",
+        "ISI is a full-width section below marketing content, clearly delimited, minimum 10px throughout.",
+        "Orange divider rules (1px solid #FF6A39) frame regulatory footnotes on #EEF3F8 only — not decorative use elsewhere.",
+        "No italics or skew in headline typography per brand restraint; emphasis via weight and color, not oblique type."
+      ],
+
+      "other_rules": [
+        "gMG indication: adult patients with anti-acetylcholine receptor (AChR) antibody-positive generalized myasthenia gravis — use approved wording only.",
+        "Boxed WARNING for meningococcal infections is mandatory in safety/ISI; ULTOMIRIS is a complement inhibitor increasing risk of serious Neisseria meningitidis infections.",
+        "ULTOMIRIS and SOLIRIS REMS program language required when describing meningococcal risk.",
+        "Superlative claims ('first and only long-acting complement C5 inhibitor') require CHAMPION-MG or approved trial citation superscripts.",
+        "Efficacy data must show drug-arm and placebo/comparator values together (MG-ADL, QMG, PD endpoints).",
+        "Brand sign-off: Alexion, AstraZeneca Rare Disease.",
+        "PI access line must reference Boxed WARNING and Medication Guide.",
+        "Color values in this ruleset supersede approximate hues — specify exact HEX from the brand book (#008578 not 'teal', #FF6A39 not 'orange').",
+        "Do not use non-brand colors (#4B2D8F violet, #6B1A2A burgundy) — outside ULTOMIRIS identity.",
+        "ULTOMIRIS® on first mention per section; ravulizumab-cwvz in parentheses when full drug name is required."
+      ]
+    }
+  }
+}

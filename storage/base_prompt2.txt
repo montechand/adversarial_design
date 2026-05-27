@@ -1,0 +1,951 @@
+# HTML Email Design Spec — Candidate 1
+## "Magazine Editorial / Oversized Type / Breakout Card Architecture / Clinical Cool Navy + Ice Blue / Progressive Disclosure / Empowering Patient Outcomes"
+
+---
+
+## OVERARCHING DESIGN PHILOSOPHY
+
+This spec produces a 600px single-column nested-table HTML email. The forced axis **"magazine-style, oversized type with breakout image"** is expressed through extreme typographic scale contrast (48px/14px as the primary hierarchy pair), bold full-bleed section headers that behave like magazine spreads, and a hero band structured as a magazine cover layout — logo top-left, oversized headline dominating the panel, and a structured "breakout" data panel that visually ruptures the grid boundary using an inset bordered card with a shadow-simulation technique (via stacked colored rows). This inherits Ref [2]'s hero composition DNA (brand lockup + bold overlay type on dark navy) and Ref [1]'s numbered card modularity, applied through the magazine editorial lens.
+
+The forced axis **"clinical cool: navy #1A2B6B + white + ice blue accent"** is expressed WITHIN brand rules as follows: The brand-mandated campaign navy `#103F66` anchors all dark bands. The "ice blue" axis is implemented using `#EEF3F8` (the brand-approved light exploratory wash per brand rules) as section fill for alternating bands, with `#5C88DA` (brand-approved secondary light blue per color rules) used as a structural accent — thin rules, table borders, and a single accent bar — that reads as ice-blue shimmer against the cool navy + white palette. `#1A2B6B` (the forced axis color) is used as a deep-shadow variant specifically for the hero sub-panel background and progressive disclosure card borders, which falls within the "campaign navy family" and does not introduce a non-brand color. `#008578` brand turquoise remains for eyebrows, headlines, ISI, and logo-adjacent accents per SUPREME brand rules.
+
+The forced axis **"geometric sans (Inter/Helvetica) with extreme size contrast 48px/14px"** is reconciled with brand rules as follows: Arial/Helvetica is the mandated email-safe substitute for News Gothic BT. All type is Arial/Helvetica throughout. The extreme scale contrast is achieved by setting section-level KPI numerals and the hero headline at 48px (the "magazine cover number" size), while all supporting body copy runs at 14px — creating the 48/14 contrast ratio demanded by the axis. No `@font-face`. No Inter import. The effect reads as geometric-editorial because Helvetica/Arial at 48px bold carries the same geometric authority as Inter, especially against dense 14px body copy.
+
+The forced axis **"sticky bottom bar with single CTA"** is implemented identically to Ref [2]'s CTA band: a full-width `#FF6A39` orange band as the sole primary CTA placement — the last marketing band before ISI. No mid-email CTA. The CTA band uses a magazine-spread full-bleed approach: oversized action copy at 28px spans the width, with the button as a white-filled pill with `#FF6A39` text (inverted from the usual), creating maximum contrast and visual surprise within the orange field.
+
+The forced axis **"progressive disclosure: summary cards that hint at detail"** is implemented through a three-tier architecture per efficacy section: (1) an oversized KPI numeral "cover card" (48px stat, minimal label) that delivers the headline finding at a glance; (2) a "hint bar" — a full-width `#1A2B6B` deep-navy strip below the card bearing the secondary finding in 12px uppercase with a rightward chevron — acting as a visual prompt that more detail follows; (3) a detail prose block in 14px Arial below. This simulates progressive disclosure editorially without JavaScript.
+
+The forced axis **"empowering patient outcomes narrative"** is expressed at the copy-framing and visual hierarchy level: section eyebrows lead with patient functional outcome language ("FUNCTION RESTORED," "STRENGTH RETURNED," "PROTECTED FROM FIRST INFUSION"), headlines foreground the patient benefit before the mechanism, and the hero band opens with a patient-centered framing subline before the clinical data entry. This is the human reference standard from Ref [2]'s "Strive for Zero" campaign positioning — data in service of a patient narrative.
+
+**Primary baseline weakness directly countered — "Hero banner renders as a solid dark navy rectangle with no visible brand logo, product imagery, or indication text":** This spec implements a structured two-column magazine hero composition within the `#103F66` navy band: left column carries the ULTOMIRIS logo `[images_base64_1]` (170px wide, white reverse), the indication identity tag, and a stacked teal accent sweep (three decreasing-width colored rows: `#008578` → `#33ADA0` → `#5C88DA`, simulating a cool gradient sweep without images); right column carries an oversized 48px white headline and a breakout data card with `#1A2B6B` deep fill and `#5C88DA` ice-blue border. This directly answers the "flat solid navy rectangle" failure while remaining fully table-based and Outlook-safe. The logo is visible, the indication is declared, and the hero does visual work.
+
+**Secondary baseline weakness countered — "Excessive section border repetition creates a ledger/spreadsheet feel":** This spec uses background-color band transitions as the sole section separator. Zero `1px #D7D2CB` horizontal divider rules between sections. Band sequence: `#103F66` → `#EEF3F8` → `#FFFFFF` → `#103F66` → `#1A2B6B`-shifted slate → `#FFFFFF` → `#EEF3F8` → `#FF6A39` → `#FFFFFF` → `#008578` ISI → `#FFFFFF` → `#12314B` footer. The ice-blue `#EEF3F8` bands replace the baseline's repeated `#D7D2CB` divider logic with purposeful background alternation per Ref [2]'s section rhythm.
+
+---
+
+## GLOBAL LAYOUT PARAMETERS
+
+**Outer page wrapper:**
+```
+<body bgcolor="#EEF3F8" style="background-color:#EEF3F8; margin:0; padding:0; mso-line-height-rule:exactly;">
+```
+Ice-blue `#EEF3F8` outer surround — implements the "clinical cool" axis at the page canvas level, visible on either side of the email container in desktop clients.
+
+**Email container:**
+```
+<table width="600" cellpadding="0" cellspacing="0" border="0" align="center"
+  style="max-width:600px; width:600px; margin:0 auto;
+         background-color:#FFFFFF; border-collapse:collapse;
+         border:2px solid #5C88DA;">
+```
+`2px solid #5C88DA` outer border — ice-blue accent framing the container per Ref [1] and Ref [2]'s `#E4E4E4` frame convention, here shifted to the ice-blue accent hue to express the clinical cool axis within the brand's approved secondary palette.
+
+**Internal structure:** All layout via nested `<table>` elements with `cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse;"`. Zero CSS Grid. Zero Flexbox. Zero `display:table` on content-bearing elements. Every `<td>` in multi-column rows carries both an HTML `width` attribute AND an inline `style="width:Xpx;"`.
+
+**Head `<style>` block (resets only — no layout CSS):**
+```css
+body, table, td, p, a, span, img { margin:0; padding:0; border:0; }
+table { border-collapse:collapse; mso-table-lspace:0pt; mso-table-rspace:0pt; }
+img { display:block; border:0; outline:0; text-decoration:none;
+      max-width:100%; -ms-interpolation-mode:bicubic; }
+a { text-decoration:none; color:inherit; }
+.ReadMsgBody { width:100%; }
+.ExternalClass { width:100%; }
+.ExternalClass * { line-height:100%; }
+```
+All visual and layout styling applied as inline CSS on individual elements. No external stylesheets.
+
+**Band sequence (ordered top to bottom):**
+1. PI Pre-header bar — `#F2F1F1`
+2. 8px accent strip — `#5C88DA` (ice-blue, clinical cool axis — replaces baseline's solid teal accent strip)
+3. Hero band — `#103F66` (Blueprint §1: greeting)
+4. KPI intro band — `#EEF3F8` (Blueprint §2: intro + oversized KPI breakout)
+5. Primary efficacy band — `#103F66` (Blueprint §3: MG-ADL)
+6. Secondary efficacy band — `#1A2B6B` (Blueprint §4: QMG — deep navy shifted for visual separation)
+7. Complement/PD band — `#FFFFFF` (Blueprint §5: C5 inhibition)
+8. Safety band — `#EEF3F8` (Blueprint §6: safety overview — ice blue for lighter regulatory tone)
+9. CTA sticky-bottom band — `#FF6A39` (Blueprint §7: single CTA bar)
+10. Signature band — `#FFFFFF` (Blueprint §8: sign-off)
+11. ISI header bar — `#008578`
+12. ISI content band — `#FFFFFF`
+13. Footer PI link bar — `#12314B`
+
+**Band padding rhythm (no two adjacent bands share identical vertical padding):**
+- PI pre-header: `10px 32px`
+- Accent strip: `0` (height only: 8px)
+- Hero: `0` (internal structure controls padding — see section spec)
+- KPI intro: `36px 40px`
+- Primary efficacy: `48px 40px`
+- Secondary efficacy: `40px 40px`
+- Complement/PD: `44px 40px`
+- Safety: `36px 40px`
+- CTA bar: `32px 40px`
+- Signature: `28px 40px`
+- ISI header: `12px 28px`
+- ISI content: `20px 28px 24px 28px`
+- Footer: `16px 28px`
+
+---
+
+## TYPOGRAPHY SYSTEM
+
+**SUPREME brand rule: Arial/Helvetica throughout — no @font-face, no external imports. Extreme size contrast (48px / 14px) achieved via Arial/Helvetica bold at oversized scales.**
+
+### Type Role Definitions
+
+**Magazine cover KPI numeral — Arial bold, 48px, `#FF6A39` (brand orange — sole warm stat accent):**
+```
+font-family: Arial, Helvetica, sans-serif;
+font-size: 48px; font-weight: bold; color: #FF6A39;
+line-height: 1; letter-spacing: -1px;
+```
+On dark bands (`#103F66`, `#1A2B6B`): `color: #FF6A39;`
+On light bands (`#EEF3F8`, `#FFFFFF`): `color: #FF6A39;`
+This is the "48px" pole of the 48/14 extreme contrast axis.
+
+**Hero display headline — Arial bold, 48px, white (hero only):**
+```
+font-family: Arial, Helvetica, sans-serif;
+font-size: 48px; font-weight: bold; color: #FFFFFF;
+line-height: 1.0; letter-spacing: -1px;
+```
+On `#103F66` hero band only. This is the magazine-cover typographic entry point.
+
+**Section headline — Arial bold, ALL CAPS, 22px, `#008578` turquoise (per brand rule: primary headlines in turquoise):**
+```
+font-family: Arial, Helvetica, sans-serif;
+font-size: 22px; font-weight: bold;
+text-transform: uppercase; color: #008578;
+line-height: 1.2; letter-spacing: 0.5px;
+```
+On light bands (`#FFFFFF`, `#EEF3F8`): `color: #008578;`
+On dark bands (`#103F66`, `#1A2B6B`): `color: #FFFFFF;` (white reversal — brand rule for dark band headlines)
+
+Note: brand rule specifies turquoise `#008578` for primary headlines. On dark bands the approved template overrides to white with `#008578` structural accents in the section, consistent with brand's approved HCP email dark band executions.
+
+**Eyebrow label — Arial bold, ALL CAPS, 10px, `#008578`, letter-spacing 2.5px:**
+```
+font-family: Arial, Helvetica, sans-serif;
+font-size: 10px; font-weight: bold;
+text-transform: uppercase; letter-spacing: 2.5px;
+```
+On light bands: `color: #008578;`
+On dark bands: `color: #33ADA0;` (lighter teal for contrast)
+
+**Paragraph title — Arial bold, ALL CAPS, 10px, `#A73A64` magenta (brand rule — ALL CAPS paragraph titles):**
+```
+font-family: Arial, Helvetica, sans-serif;
+font-size: 10px; font-weight: bold;
+text-transform: uppercase; letter-spacing: 2px;
+color: #A73A64;
+```
+On dark bands where `#A73A64` fails contrast: substitute `color: #FFFFFF;` and note in code comment.
+
+**Subhead — Arial bold, sentence case, 16px:**
+```
+font-family: Arial, Helvetica, sans-serif;
+font-size: 16px; font-weight: bold; line-height: 1.4;
+```
+On light bands: `color: #3F4444;`
+On dark bands: `color: #FFFFFF;`
+
+**Body copy — Arial regular, 14px (the "14px" pole of the 48/14 contrast axis — deliberate extreme contrast):**
+```
+font-family: Arial, Helvetica, sans-serif;
+font-size: 14px; font-weight: normal; line-height: 1.5;
+color: #3F4444;
+```
+On dark bands: `color: #FFFFFF;`
+
+**KPI label — Arial bold, ALL CAPS, 11px:**
+```
+font-family: Arial, Helvetica, sans-serif;
+font-size: 11px; font-weight: bold;
+text-transform: uppercase; letter-spacing: 1.5px;
+```
+On light bands: `color: #3F4444;`
+On dark bands: `color: #FFFFFF;`
+
+**Progressive disclosure hint bar text — Arial bold, ALL CAPS, 11px, `#FFFFFF`:**
+```
+font-family: Arial, Helvetica, sans-serif;
+font-size: 11px; font-weight: bold;
+text-transform: uppercase; letter-spacing: 1px;
+color: #FFFFFF;
+```
+Used exclusively in the full-width `#1A2B6B` hint strip below each summary card.
+
+**Data table header — Arial bold, ALL CAPS, 11px, `#FFFFFF`:**
+```
+font-family: Arial, Helvetica, sans-serif;
+font-size: 11px; font-weight: bold;
+text-transform: uppercase; letter-spacing: 1px;
+color: #FFFFFF;
+```
+
+**Inline footnote / caption — Arial regular, 10px minimum (brand rule, zero exceptions):**
+```
+font-family: Arial, Helvetica, sans-serif;
+font-size: 10px; font-weight: normal; line-height: 1.5;
+```
+On light bands: `color: #3F4444;`
+On dark bands: `color: #D7D2CB;`
+
+**Superscript citation:**
+```html
+<sup style="font-family:Arial,Helvetica,sans-serif; font-size:9px;
+            line-height:0; vertical-align:super;">1</sup>
+```
+
+**P-values:** `P&lt;0.001` — capital P, no space before operator, Arial bold 12px inline on dark; 12px bold `#103F66` on light.
+
+**CTA band headline — Arial bold, 28px, `#FFFFFF` (magazine-spread oversized action copy):**
+```
+font-family: Arial, Helvetica, sans-serif;
+font-size: 28px; font-weight: bold;
+color: #FFFFFF; line-height: 1.2;
+```
+
+**CTA button text — Arial bold, 16px, `#FF6A39`, inside white pill button:**
+```
+font-family: Arial, Helvetica, sans-serif;
+font-size: 16px; font-weight: bold;
+color: #FF6A39; text-decoration: none;
+letter-spacing: 0.5px; text-transform: uppercase;
+```
+Button container: `background-color:#FFFFFF; padding:14px 36px;` — white pill on orange field for maximum surprise contrast. This is the one CTA in the email.
+
+**ISI text — Arial regular, 10px minimum (brand rule, zero exceptions):**
+```
+font-family: Arial, Helvetica, sans-serif;
+font-size: 10px; font-weight: normal;
+color: #3F4444; line-height: 1.4;
+```
+ISI subheads: `font-size: 11px; font-weight: bold; color: #008578;`
+ISI Boxed WARNING header: `font-size: 11px; font-weight: bold; text-transform: uppercase; color: #000000; letter-spacing: 1px;` inside a `1px solid #000000` bordered box per brand rule.
+
+**No italics anywhere. Emphasis via weight, color, letter-spacing only.**
+**Non-breaking hyphen for anti–AChR: `anti&#8209;AChR`**
+**ULTOMIRIS® first mention per section: `ULTOMIRIS&#174; (ravulizumab-cwvz)`; subsequent mentions: `ULTOMIRIS&#174;`**
+
+---
+
+## SECTION-BY-SECTION SPEC
+
+---
+
+### BAND 0 — PI PRE-HEADER BAR
+
+**Container `<td>`:**
+- `bgcolor="#F2F1F1"` attribute
+- inline style: `background-color:#F2F1F1; padding:10px 32px; text-align:center;`
+
+**Content:** Single centered `<p>` element, Arial 13px bold `#3F4444`:
+Text: `IMPORTANT SAFETY INFORMATION including Boxed WARNING for serious meningococcal infections.&nbsp;`
+
+Followed inline by:
+```html
+<a href="#isi" style="color:#008578; text-decoration:underline;
+   font-family:Arial,Helvetica,sans-serif; font-size:13px;
+   font-weight:bold;">See full Prescribing Information</a>
+```
+
+---
+
+### BAND 0.5 — ACCENT STRIP
+
+8px solid `#5C88DA` horizontal strip — ice-blue clinical cool axis accent, replaces the baseline's plain teal strip and the base spec's `#008578` strip. This is the first ice-blue signal that establishes the clinical cool register for the entire email.
+
+```html
+<tr>
+  <td height="8" bgcolor="#5C88DA"
+      style="background-color:#5C88DA; font-size:0;
+             line-height:0; mso-line-height-rule:exactly;">&nbsp;</td>
+</tr>
+```
+
+---
+
+### SECTION 1 — HERO BAND (Blueprint: greeting)
+
+**Purpose:** Magazine cover composition. Counters baseline weakness "Hero banner renders as a solid dark navy rectangle." Implements magazine-style editorial layout with two distinct columns, oversized 48px headline, logo presence, and breakout data card with ice-blue border.
+
+**Container `<td>`:**
+- `bgcolor="#103F66"` attribute
+- inline style: `background-color:#103F66; padding:0;`
+
+**Internal structure:** Nested `<table>` at `width="596"` (596 = 600 minus 2px each side for container border), `cellpadding="0" cellspacing="0" border="0"`. Single `<tr>` with two `<td>` columns.
+
+---
+
+**Left identity column — width="200":**
+- `<td width="200" valign="top" style="width:200px; padding:36px 16px 36px 24px; background-color:#103F66; vertical-align:top;">`
+
+Inside top to bottom:
+
+**1. ULTOMIRIS logo — `[images_base64_1]`, 160px wide, white reverse:**
+```html
+<img src="[images_base64_1]"
+     alt="ULTOMIRIS (ravulizumab-cwvz)"
+     width="160" height="40"
+     style="display:block; border:0; max-width:100%;
+            margin-bottom:24px;">
+```
+Developer note: `[images_base64_1]` must be the ULTOMIRIS gMG white-reverse logo — confirm asset matches gMG indication, not NMOSD. Flag in code comment: `<!-- ASSET CHECK: Confirm [images_base64_1] is ULTOMIRIS gMG reverse logo, not NMOSD ocean-wave asset -->`. This directly addresses the baseline asset pipeline error.
+
+**2. Ice-blue accent sweep — three decreasing-width rows simulating a cool gradient wedge (Outlook-safe, no images):**
+```html
+<table cellpadding="0" cellspacing="0" border="0"
+       style="margin-bottom:20px;">
+  <tr>
+    <td width="140" height="4" bgcolor="#5C88DA"
+        style="background-color:#5C88DA; font-size:0;
+               line-height:0; mso-line-height-rule:exactly;">&nbsp;</td>
+  </tr>
+  <tr>
+    <td width="100" height="4" bgcolor="#008578"
+        style="background-color:#008578; font-size:0;
+               line-height:0; mso-line-height-rule:exactly;">&nbsp;</td>
+  </tr>
+  <tr>
+    <td width="60" height="4" bgcolor="#33ADA0"
+        style="background-color:#33ADA0; font-size:0;
+               line-height:0; mso-line-height-rule:exactly;">&nbsp;</td>
+  </tr>
+</table>
+```
+This sweep uses the three-tone sequence `#5C88DA` (ice blue) → `#008578` (brand turquoise) → `#33ADA0` (lighter teal), reading left-to-right as a cool temperature gradient from the forced clinical cool axis into the brand turquoise. No image dependency.
+
+**3. Indication eyebrow (Arial 10px bold, ALL CAPS, `#33ADA0`, tracked):**
+```
+font-family: Arial, Helvetica, sans-serif; font-size: 10px;
+font-weight: bold; text-transform: uppercase; letter-spacing: 2.5px;
+color: #33ADA0; margin: 0 0 8px 0;
+```
+Text: `FOR ANTI&#8209;AChR+ gMG`
+
+**4. Drug descriptor (Arial 11px regular, `#EEF3F8` — the ice-blue body tint as text on dark):**
+```
+font-family: Arial, Helvetica, sans-serif; font-size: 11px;
+font-weight: normal; color: #EEF3F8; line-height: 1.5; margin: 0;
+```
+Text: `Long-acting C5 inhibitor<br>8-week dosing interval`
+
+---
+
+**Right content column — width="396":**
+- `<td width="396" valign="top" style="width:396px; padding:36px 24px 36px 20px; background-color:#103F66; vertical-align:top;">`
+
+Inside top to bottom:
+
+**1. Empowering patient outcomes eyebrow (Arial 10px bold, ALL CAPS, `#33ADA0`, tracked — patient narrative axis):**
+```
+font-family: Arial, Helvetica, sans-serif; font-size: 10px;
+font-weight: bold; text-transform: uppercase; letter-spacing: 2.5px;
+color: #33ADA0; margin: 0 0 12px 0;
+```
+Text: `CHAMPION&#8209;MG — RESTORING WHAT gMG TAKES AWAY`
+
+**2. Hero magazine headline — Arial bold, 48px, white (extreme typographic scale — forced axis pole):**
+```
+font-family: Arial, Helvetica, sans-serif;
+font-size: 48px; font-weight: bold;
+color: #FFFFFF; line-height: 1.0;
+letter-spacing: -1px; margin: 0 0 16px 0;
+```
+Text: `Dear Neuromuscular Specialist,`
+
+Developer note: at 48px this headline will span approximately 2–3 lines within the 352px usable width of the right column (396px minus 44px total horizontal padding). This deliberate line-wrapping creates the magazine-cover stacked-word effect. No line-break tags needed — let natural wrapping occur.
+
+**3. Hero salutation subline (Arial regular, 14px, `#EEF3F8` — the 14px pole of the 48/14 contrast, ice-blue tint on dark for "clinical cool" feel):**
+```
+font-family: Arial, Helvetica, sans-serif; font-size: 14px;
+font-weight: normal; color: #EEF3F8; line-height: 1.5; margin: 0 0 20px 0;
+```
+Text: `We recognize your expertise in managing adults with anti&#8209;AChR antibody&#8209;positive generalized myasthenia gravis (gMG). CHAMPION&#8209;MG 26&#8209;week data for ULTOMIRIS&#174; (ravulizumab-cwvz) follows below.`
+
+**4. Breakout data card — magazine "callout box" breaking from body flow (nested `<table>`, 352px, `#1A2B6B` deep navy fill, `2px solid #5C88DA` border — ice-blue border as the breakout frame device):**
+
+```html
+<table width="352" cellpadding="0" cellspacing="0" border="0"
+       style="background-color:#1A2B6B;
+              border:2px solid #5C88DA;
+              border-collapse:collapse;">
+```
+
+Inside: single column, 352px. Three rows:
+
+Row 1 — card header (`#5C88DA` ice-blue fill, 8px):
+```html
+<tr>
+  <td bgcolor="#5C88DA"
+      style="background-color:#5C88DA; padding:6px 16px;">
+    <p style="font-family:Arial,Helvetica,sans-serif; font-size:9px;
+       font-weight:bold; text-transform:uppercase; letter-spacing:2.5px;
+       color:#FFFFFF; margin:0;">WEEK 26 KEY RESULTS AT A GLANCE</p>
+  </td>
+</tr>
+```
+
+Row 2 — two-column KPI pair within the card:
+```html
+<tr>
+  <td style="padding:14px 16px;">
+    <table width="320" cellpadding="0" cellspacing="0" border="0">
+      <tr>
+        <td width="155" valign="top"
+            style="width:155px; padding-right:10px;
+                   border-right:1px solid #5C88DA;
+                   text-align:center; vertical-align:top;">
+          <p style="font-family:Arial,Helvetica,sans-serif; font-size:48px;
+             font-weight:bold; color:#FF6A39; line-height:1;
+             margin:0 0 2px 0;">&minus;3.1</p>
+          <p style="font-family:Arial,Helvetica,sans-serif; font-size:10px;
+             font-weight:bold; text-transform:uppercase; letter-spacing:1px;
+             color:#FFFFFF; margin:0;">MG&#8209;ADL pts</p>
+        </td>
+        <td width="155" valign="top"
+            style="width:155px; padding-left:10px;
+                   text-align:center; vertical-align:top;">
+          <p style="font-family:Arial,Helvetica,sans-serif; font-size:48px;
+             font-weight:bold; color:#FF6A39; line-height:1;
+             margin:0 0 2px 0;">3.5&#215;</p>
+          <p style="font-family:Arial,Helvetica,sans-serif; font-size:10px;
+             font-weight:bold; text-transform:uppercase; letter-spacing:1px;
+             color:#FFFFFF; margin:0;">QMG improvement</p>
+        </td>
+      </tr>
+    </table>
+  </td>
+</tr>
+```
+
+Row 3 — card footnote bar (`#103F66` fill, slightly lighter than card body):
+```html
+<tr>
+  <td bgcolor="#103F66"
+      style="background-color:#103F66; padding:6px 16px;">
+    <p style="font-family:Arial,Helvetica,sans-serif; font-size:9px;
+       font-weight:normal; color:#EEF3F8; margin:0;">
+       vs placebo; P&lt;0.001. CHAMPION&#8209;MG trial.
+       ULTOMIRIS&#174; n=86; placebo n=89.<sup style="font-size:8px;
+       line-height:0; vertical-align:super;">1</sup>
+    </p>
+  </td>
+</tr>
+```
+
+Close breakout card: `</table>`
+
+---
+
+### SECTION 2 — KPI INTRO BAND (Blueprint: intro)
+
+**Container `<td>`:**
+- `bgcolor="#EEF3F8"` attribute
+- inline style: `background-color:#EEF3F8; padding:36px 40px;`
+
+Ice-blue `#EEF3F8` band — clinical cool axis applied to the intro zone. Transitions from dark navy hero into this cool-tinted light band, establishing the ice-blue register before white bands begin.
+
+**Content, top to bottom — 520px usable content area:**
+
+**1. Eyebrow (Arial 10px bold, ALL CAPS, `#008578`, tracked):**
+```
+font-family: Arial, Helvetica, sans-serif; font-size: 10px;
+font-weight: bold; text-transform: uppercase; letter-spacing: 2.5px;
+color: #008578; margin: 0 0 8px 0;
+```
+Text: `CHAMPION&#8209;MG TRIAL — 26-WEEK CONTROLLED DATA`
+
+**2. Section headline (Arial bold, ALL CAPS, 22px, `#008578` turquoise — brand rule for primary headlines):**
+```
+font-family: Arial, Helvetica, sans-serif;
+font-size: 22px; font-weight: bold;
+text-transform: uppercase; color: #008578;
+line-height: 1.2; letter-spacing: 0.5px; margin: 0 0 10px 0;
+```
+Text: `A long-acting complement option for appropriate adults with anti&#8209;AChR+ gMG`
+
+**3. 4px `#008578` decorative rule, 80px wide:**
+```html
+<table width="80" cellpadding="0" cellspacing="0" border="0"
+       style="margin-bottom:14px;">
+  <tr>
+    <td height="4" bgcolor="#008578"
+        style="background-color:#008578; font-size:0;
+               line-height:0; mso-line-height-rule:exactly;">&nbsp;</td>
+  </tr>
+</table>
+```
+
+**4. Subhead — empowering patient outcomes framing (Arial bold, 16px, `#3F4444`):**
+```
+font-family: Arial, Helvetica, sans-serif; font-size: 16px;
+font-weight: bold; color: #3F4444; line-height: 1.4; margin: 0 0 12px 0;
+```
+Text: `For patients whose gMG symptoms persist, meaningful restoration of daily function is the clinical goal.`
+
+**5. Body copy paragraph 1 (Arial regular, 14px, `#3F4444` — the 14px pole of the contrast system):**
+```
+font-family: Arial, Helvetica, sans-serif; font-size: 14px;
+font-weight: normal; color: #3F4444; line-height: 1.5; margin: 0 0 10px 0;
+```
+Text: `ULTOMIRIS&#174; (ravulizumab-cwvz) is the first and only long&#8209;acting complement C5 inhibitor approved for adults with anti&#8209;AChR antibody&#8209;positive generalized myasthenia gravis (gMG).<sup style="font-family:Arial,Helvetica,sans-serif; font-size:9px; line-height:0; vertical-align:super;">1</sup>`
+
+**6. Body copy paragraph 2 (Arial regular, 14px, `#3F4444`):**
+```
+font-family: Arial, Helvetica, sans-serif; font-size: 14px;
+font-weight: normal; color: #3F4444; line-height: 1.5; margin: 0 0 20px 0;
+```
+Text: `The CHAMPION&#8209;MG trial &#8212; a randomized, double&#8209;blind, placebo&#8209;controlled 26&#8209;week study in adults with anti&#8209;AChR+ gMG (ULTOMIRIS&#174; n=86; placebo n=89) &#8212; provides the controlled 26&#8209;week data characterizing ULTOMIRIS&#174; across the full symptom journey.<sup style="font-size:9px; line-height:0; vertical-align:super;">1</sup>`
+
+**7. Trial design overview card (progressive disclosure "hint" card — nested `<table>`, 520px, `#FFFFFF` fill, `1px solid #5C88DA` outer border, `4px solid #008578` left accent border — inherits Ref [1]'s left-border blockquote motif and Ref [2]'s PD callout box):**
+
+Outer card table:
+```html
+<table width="520" cellpadding="0" cellspacing="0" border="0"
+       style="background-color:#FFFFFF;
+              border:1px solid #5C88DA;
+              border-left:4px solid #008578;
+              border-collapse:collapse;
+              margin-bottom:16px;">
+```
+
+Card header row — `#008578` fill, white text:
+```html
+<tr>
+  <td bgcolor="#008578"
+      style="background-color:#008578; padding:8px 16px;">
+    <p style="font-family:Arial,Helvetica,sans-serif; font-size:11px;
+       font-weight:bold; text-transform:uppercase; letter-spacing:1px;
+       color:#FFFFFF; margin:0;">CHAMPION&#8209;MG TRIAL DESIGN
+       <sup style="font-size:9px; line-height:0; vertical-align:super;">1</sup>
+    </p>
+  </td>
+</tr>
+```
+
+Two-column data row — 252px / 268px within 520px card:
+```html
+<tr>
+  <td width="252" valign="top"
+      style="width:252px; padding:10px 16px;
+             background-color:#FFFFFF;
+             border-right:1px solid #5C88DA;
+             vertical-align:top;">
+    <p style="font-family:Arial,Helvetica,sans-serif; font-size:10px;
+       font-weight:bold; text-transform:uppercase; letter-spacing:1.5px;
+       color:#008578; margin:0 0 3px 0;">STUDY DESIGN</p>
+    <p style="font-family:Arial,Helvetica,sans-serif; font-size:12px;
+       font-weight:normal; color:#3F4444; line-height:1.4; margin:0;">
+       Randomized, double&#8209;blind, placebo&#8209;controlled, 26 weeks</p>
+  </td>
+  <td width="268" valign="top"
+      style="width:268px; padding:10px 16px;
+             background-color:#FFFFFF; vertical-align:top;">
+    <p style="font-family:Arial,Helvetica,sans-serif; font-size:10px;
+       font-weight:bold; text-transform:uppercase; letter-spacing:1.5px;
+       color:#008578; margin:0 0 3px 0;">POPULATION &amp; PRIMARY ENDPOINT</p>
+    <p style="font-family:Arial,Helvetica,sans-serif; font-size:12px;
+       font-weight:normal; color:#3F4444; line-height:1.4; margin:0;">
+       Adults with anti&#8209;AChR+ gMG (ULTOMIRIS&#174; n=86; placebo n=89);
+       MG&#8209;ADL total score change from baseline at Week 26</p>
+  </td>
+</tr>
+```
+Close card: `</table>`
+
+**8. Section footnote (Arial 10px regular `#3F4444`):**
+```html
+<p style="font-family:Arial,Helvetica,sans-serif; font-size:10px;
+   font-weight:normal; color:#3F4444; line-height:1.5; margin:0;">
+   <sup style="font-size:9px; line-height:0; vertical-align:super;">1</sup>
+   ULTOMIRIS&#174; (ravulizumab-cwvz) Prescribing Information.
+</p>
+```
+
+---
+
+### SECTION 3 — PRIMARY EFFICACY: MG-ADL (Blueprint: primary_efficacy_mg_adl)
+
+**Purpose:** Magazine-style data spread — oversized KPI as editorial hero number, progressive disclosure three-tier architecture, empowering patient outcomes framing.
+
+**Container `<td>`:**
+- `bgcolor="#103F66"` attribute
+- inline style: `background-color:#103F66; padding:48px 40px;`
+
+Campaign navy `#103F66` — primary authority dark band. 48px vertical padding (largest in the email — signals this is the highest-authority data section).
+
+**Content, top to bottom — 520px usable content area:**
+
+**1. Eyebrow — patient outcomes framing (Arial 10px bold, ALL CAPS, `#33ADA0`, tracked):**
+```
+font-family: Arial, Helvetica, sans-serif; font-size: 10px;
+font-weight: bold; text-transform: uppercase; letter-spacing: 2.5px;
+color: #33ADA0; margin: 0 0 8px 0;
+```
+Text: `PRIMARY ENDPOINT — PATIENT FUNCTION RESTORED`
+
+**2. Paragraph title — brand rule magenta override to white on dark (Arial 10px bold, ALL CAPS, `#FFFFFF` — magenta `#A73A64` fails contrast on `#103F66`):**
+```
+font-family: Arial, Helvetica, sans-serif; font-size: 10px;
+font-weight: bold; text-transform: uppercase; letter-spacing: 2px;
+color: #FFFFFF; margin: 0 0 8px 0;
+```
+Text: `MG&#8209;ADL TOTAL SCORE` (`<!-- Brand note: #A73A64 magenta overrides to #FFFFFF on #103F66 dark band per WCAG AA contrast requirement -->`)
+
+**3. Section headline — Arial bold, ALL CAPS, 22px, white (dark band approved reversal):**
+```
+font-family: Arial, Helvetica, sans-serif;
+font-size: 22px; font-weight: bold;
+text-transform: uppercase; color: #FFFFFF;
+line-height: 1.2; letter-spacing: 0.5px; margin: 0 0 20px 0;
+```
+Text: `MORE THAN 2&#215; GREATER MG&#8209;ADL IMPROVEMENT VS PLACEBO AT WEEK 26`
+
+**4. Progressive disclosure TIER 1 — Magazine KPI card ("cover card," 520px, `#1A2B6B` fill, `2px solid #5C88DA` ice-blue border — breakout magazine card device):**
+
+```html
+<table width="520" cellpadding="0" cellspacing="0" border="0"
+       style="background-color:#1A2B6B;
+              border:2px solid #5C88DA;
+              border-collapse:collapse;
+              margin:0 0 0 0;">
+```
+
+Inside: two equal columns at 258px each, separated by `1px solid #5C88DA`:
+
+```html
+  <tr>
+    <td width="258" valign="middle"
+        style="width:258px; padding:24px 20px;
+               background-color:#1A2B6B;
+               border-right:1px solid #5C88DA;
+               text-align:center; vertical-align:middle;">
+      <p style="font-family:Arial,Helvetica,sans-serif; font-size:10px;
+         font-weight:bold; text-transform:uppercase; letter-spacing:2px;
+         color:#33ADA0; margin:0 0 8px 0;">ULTOMIRIS&#174; (n=86)</p>
+      <p style="font-family:Arial,Helvetica,sans-serif; font-size:48px;
+         font-weight:bold; color:#FF6A39; line-height:1;
+         letter-spacing:-1px; margin:0 0 4px 0;">
+         &minus;3.1<sup style="font-size:16px; line-height:0;
+         vertical-align:super; color:#D7D2CB;">1</sup>
+      </p>
+      <p style="font-family:Arial,Helvetica,sans-serif; font-size:11px;
+         font-weight:bold; text-transform:uppercase; letter-spacing:1px;
+         color:#FFFFFF; margin:0;">POINTS MG&#8209;ADL</p>
+    </td>
+    <td width="258" valign="middle"
+        style="width:258px; padding:24px 20px;
+               background-color:#1A2B6B;
+               text-align:center; vertical-align:middle;">
+      <p style="font-family:Arial,Helvetica,sans-serif; font-size:10px;
+         font-weight:bold; text-transform:uppercase; letter-spacing:2px;
+         color:#33ADA0; margin:0 0 8px 0;">PLACEBO (n=89)</p>
+      <p style="font-family:Arial,Helvetica,sans-serif; font-size:48px;
+         font-weight:bold; color:#EEF3F8; line-height:1;
+         letter-spacing:-1px; margin:0 0 4px 0;">&minus;1.4</p>
+      <p style="font-family:Arial,Helvetica,sans-serif; font-size:12px;
+         font-weight:bold; color:#33ADA0; margin:0;">
+         P&lt;0.001<sup style="font-size:9px; line-height:0;
+         vertical-align:super;">1</sup>
+      </p>
+    </td>
+  </tr>
+```
+
+**5. Progressive disclosure TIER 2 — "Hint bar" (full-width `#008578` teal strip immediately below the KPI card — within the same table structure, as a colspan row):**
+
+```html
+  <tr>
+    <td colspan="2"
+        style="background-color:#008578; padding:10px 20px;
+               text-align:center;">
+      <p style="font-family:Arial,Helvetica,sans-serif; font-size:11px;
+         font-weight:bold; color:#FFFFFF; text-transform:uppercase;
+         letter-spacing:1px; margin:0;">
+         A &#8805;3&#8209;POINT MG&#8209;ADL IMPROVEMENT IN A SIGNIFICANTLY
+         GREATER PROPORTION OF PATIENTS &nbsp;&#8250;&nbsp;
+         P&lt;0.001<sup style="font-size:9px; line-height:0;
+         vertical-align:super;">1</sup>
+      </p>
+    </td>
+  </tr>
+</table>
+```
+
+Margin below card: `<table width="520" cellpadding="0" cellspacing="0" border="0"><tr><td height="20" style="font-size:0; line-height:0; mso-line-height-rule:exactly;">&nbsp;</td></tr></table>`
+
+**6. Progressive disclosure TIER 3 — Detail subhead and prose (Arial bold 16px / Arial regular 14px on navy):**
+
+Subhead (Arial bold, 16px, `#FFFFFF`):
+```
+font-family: Arial, Helvetica, sans-serif; font-size: 16px;
+font-weight: bold; color: #FFFFFF; line-height: 1.4; margin: 0 0 12px 0;
+```
+Text: `Patients demonstrated meaningful restoration of daily function with ULTOMIRIS&#174; vs placebo in CHAMPION&#8209;MG.`
+
+Body copy (Arial regular, 14px, `#FFFFFF` — extreme contrast pair: 48px KPI vs 14px prose):
+```
+font-family: Arial, Helvetica, sans-serif; font-size: 14px;
+font-weight: normal; color: #FFFFFF; line-height: 1.5; margin: 0 0 14px 0;
+```
+Text: `In the randomized, double&#8209;blind, placebo&#8209;controlled CHAMPION&#8209;MG trial in adults with anti&#8209;AChR+ gMG (ULTOMIRIS&#174; n=86; placebo n=89), ULTOMIRIS&#174; achieved a significantly greater mean improvement in MG&#8209;ADL total score at Week 26 (&minus;3.1 vs &minus;1.4 points; P&lt;0.001).<sup style="font-family:Arial,Helvetica,sans-serif; font-size:9px; line-height:0; vertical-align:super;">1</sup> A significantly greater proportion of ULTOMIRIS&#174;-treated patients achieved a &#8805;3&#8209;point MG&#8209;ADL improvement at Week 26 vs placebo (P&lt;0.001).<sup style="font-size:9px; line-height:0; vertical-align:super;">1</sup>`
+
+**7. Inline footnote (Arial 10px regular `#D7D2CB` — brand-approved cream on dark):**
+```html
+<p style="font-family:Arial,Helvetica,sans-serif; font-size:10px;
+   font-weight:normal; color:#D7D2CB; line-height:1.5; margin:0;">
+   <sup style="font-size:9px; line-height:0; vertical-align:super;">1</sup>
+   CHAMPION&#8209;MG trial data. ULTOMIRIS&#174; (ravulizumab-cwvz)
+   Prescribing Information.
+</p>
+```
+
+---
+
+### SECTION 4 — SECONDARY EFFICACY: QMG (Blueprint: secondary_efficacy_qmg)
+
+**Container `<td>`:**
+- `bgcolor="#1A2B6B"` attribute
+- inline style: `background-color:#1A2B6B; padding:40px 40px;`
+
+Deep navy `#1A2B6B` — the clinical cool axis deepened navy, distinct from the `#103F66` above. Creates visible tonal separation between adjacent dark efficacy sections without introducing non-brand colors. `#1A2B6B` is expressly within the navy family and serves as the "depth shifted cobalt" variant. Developer: verify against production template library; if restricted to `#103F66` only, use that and note in comment.
+
+**Content, top to bottom — 520px usable content area:**
+
+**1. Eyebrow — patient strength outcomes framing (Arial 10px bold, ALL CAPS, `#33ADA0`):**
+```
+font-family: Arial, Helvetica, sans-serif; font-size: 10px;
+font-weight: bold; text-transform: uppercase; letter-spacing: 2.5px;
+color: #33ADA0; margin: 0 0 8px 0;
+```
+Text: `SECONDARY ENDPOINT — MUSCLE STRENGTH RETURNED`
+
+**2. Paragraph title (Arial 10px bold, ALL CAPS, `#FFFFFF` — magenta contrast override on dark):**
+```
+font-family: Arial, Helvetica, sans-serif; font-size: 10px;
+font-weight: bold; text-transform: uppercase; letter-spacing: 2px;
+color: #FFFFFF; margin: 0 0 8px 0;
+```
+Text: `QMG TOTAL SCORE` (`<!-- Brand note: #A73A64 overrides to #FFFFFF on #1A2B6B dark band per WCAG AA -->`)
+
+**3. Section headline (Arial bold, ALL CAPS, 22px, `#FFFFFF`):**
+```
+font-family: Arial, Helvetica, sans-serif;
+font-size: 22px; font-weight: bold;
+text-transform: uppercase; color: #FFFFFF;
+line-height: 1.2; letter-spacing: 0.5px; margin: 0 0 20px 0;
+```
+Text: `CLINICIAN-ASSESSED MUSCLE STRENGTH: SIGNIFICANT QMG IMPROVEMENTS AT 26 WEEKS`
+
+**4. Progressive disclosure TIER 1 — Three-column KPI card (520px, `#103F66` fill — slightly lighter than band, `2px solid #5C88DA` ice-blue border):**
+
+```html
+<table width="520" cellpadding="0" cellspacing="0" border="0"
+       style="background-color:#103F66;
+              border:2px solid #5C88DA;
+              border-collapse:collapse;
+              margin:0 0 0 0;">
+  <tr>
+    <td width="172" valign="middle"
+        style="width:172px; padding:20px 14px;
+               background-color:#103F66;
+               border-right:1px solid #5C88DA;
+               text-align:center; vertical-align:middle;">
+      <p style="font-family:Arial,Helvetica,sans-serif; font-size:10px;
+         font-weight:bold; text-transform:uppercase; letter-spacing:2px;
+         color:#33ADA0; margin:0 0 6px 0;">ULTOMIRIS&#174;</p>
+      <p style="font-family:Arial,Helvetica,sans-serif; font-size:48px;
+         font-weight:bold; color:#FF6A39; line-height:1;
+         letter-spacing:-1px; margin:0 0 4px 0;">
+         &minus;2.8<sup style="font-size:14px; line-height:0;
+         vertical-align:super; color:#D7D2CB;">1</sup>
+      </p>
+      <p style="font-family:Arial,Helvetica,sans-serif; font-size:11px;
+         font-weight:bold; text-transform:uppercase; letter-spacing:1px;
+         color:#FFFFFF; margin:0;">pts QMG</p>
+    </td>
+    <td width="172" valign="middle"
+        style="width:172px; padding:20px 14px;
+               background-color:#103F66;
+               border-right:1px solid #5C88DA;
+               text-align:center; vertical-align:middle;">
+      <p style="font-family:Arial,Helvetica,sans-serif; font-size:10px;
+         font-weight:bold; text-transform:uppercase; letter-spacing:2px;
+         color:#33ADA0; margin:0 0 6px 0;">PLACEBO</p>
+      <p style="font-family:Arial,Helvetica,sans-serif; font-size:48px;
+         font-weight:bold; color:#EEF3F8; line-height:1;
+         letter-spacing:-1px; margin:0 0 4px 0;">&minus;0.8</p>
+      <p style="font-family:Arial,Helvetica,sans-serif; font-size:11px;
+         font-weight:bold; text-transform:uppercase; letter-spacing:1px;
+         color:#EEF3F8; margin:0;">pts QMG</p>
+    </td>
+    <td width="176" valign="middle"
+        style="width:176px; padding:20px 14px;
+               background-color:#103F66;
+               text-align:center; vertical-align:middle;">
+      <p style="font-family:Arial,Helvetica,sans-serif; font-size:40px;
+         font-weight:bold; color:#FF6A39; line-height:1;
+         letter-spacing:-1px; margin:0 0 4px 0;">3.5&#215;</p>
+      <p style="font-family:Arial,Helvetica,sans-serif; font-size:11px;
+         font-weight:bold; text-transform:uppercase; letter-spacing:1px;
+         color:#33ADA0; margin:0 0 2px 0;">GREATER</p>
+      <p style="font-family:Arial,Helvetica,sans-serif; font-size:11px;
+         font-weight:bold; color:#33ADA0; margin:0;">
+         P&lt;0.001<sup style="font-size:9px; line-height:0;
+         vertical-align:super;">1</sup>
+      </p>
+    </td>
+  </tr>
+```
+
+**5. Progressive disclosure TIER 2 — Hint bar (colspan, `#5C88DA` ice-blue fill — ice-blue hint bar for this section, differentiating from Section 3's teal hint bar):**
+```html
+  <tr>
+    <td colspan="3"
+        style="background-color:#5C88DA; padding:10px 20px;
+               text-align:center;">
+      <p style="font-family:Arial,Helvetica,sans-serif; font-size:11px;
+         font-weight:bold; color:#FFFFFF; text-transform:uppercase;
+         letter-spacing:1px; margin:0;">
+         A &#8805;5&#8209;POINT QMG IMPROVEMENT IN A SIGNIFICANTLY GREATER
+         PROPORTION OF PATIENTS &nbsp;&#8250;&nbsp;
+         P&lt;0.001<sup style="font-size:9px; line-height:0;
+         vertical-align:super;">1</sup>
+      </p>
+    </td>
+  </tr>
+</table>
+```
+
+Spacer row: 20px height, `font-size:0; line-height:0;`
+
+**6. Progressive disclosure TIER 3 — Detail prose:**
+
+Subhead (Arial bold, 16px, `#FFFFFF`):
+```
+font-family: Arial, Helvetica, sans-serif; font-size: 16px;
+font-weight: bold; color: #FFFFFF; line-height: 1.4; margin: 0 0 12px 0;
+```
+Text: `Objective, clinician&#8209;assessed endpoint confirms global neuromuscular strength improvements beyond patient&#8209;reported outcomes.`
+
+Body copy (Arial regular, 14px, `#FFFFFF`):
+```
+font-family: Arial, Helvetica, sans-serif; font-size: 14px;
+font-weight: normal; color: #FFFFFF; line-height: 1.5; margin: 0 0 14px 0;
+```
+Text: `At Week 26, ULTOMIRIS&#174; showed a significantly greater mean improvement in QMG total score vs placebo (&minus;2.8 vs &minus;0.8 points; 3.5&#8209;fold greater improvement; P&lt;0.001),<sup style="font-size:9px; line-height:0; vertical-align:super;">1</sup> reflecting improved global muscle strength across assessed muscle groups. A higher proportion of ULTOMIRIS&#174;-treated patients also achieved a &#8805;5&#8209;point QMG improvement vs placebo at Week 26 (P&lt;0.001).<sup style="font-size:9px; line-height:0; vertical-align:super;">1</sup>`
+
+**7. Inline footnote (Arial 10px regular `#D7D2CB`):**
+```html
+<p style="font-family:Arial,Helvetica,sans-serif; font-size:10px;
+   font-weight:normal; color:#D7D2CB; line-height:1.5; margin:0;">
+   <sup style="font-size:9px; line-height:0; vertical-align:super;">1</sup>
+   CHAMPION&#8209;MG trial data. ULTOMIRIS&#174; (ravulizumab-cwvz)
+   Prescribing Information.
+</p>
+```
+
+---
+
+### SECTION 5 — COMPLEMENT INHIBITION / PD (Blueprint: complement_inhibition_pd)
+
+**Container `<td>`:**
+- `bgcolor="#FFFFFF"` attribute
+- inline style: `background-color:#FFFFFF; padding:44px 40px;`
+
+White band — maximum contrast relief after two consecutive deep dark bands. Clinical cool axis expressed through the ice-blue borders and accents within this white zone.
+
+**Content, top to bottom — 520px usable content area:**
+
+**1. Eyebrow (Arial 10px bold, ALL CAPS, `#008578`, tracked):**
+```
+font-family: Arial, Helvetica, sans-serif; font-size: 10px;
+font-weight: bold; text-transform: uppercase; letter-spacing: 2.5px;
+color: #008578; margin: 0 0 8px 0;
+```
+Text: `PHARMACODYNAMICS — COMPLEMENT C5 INHIBITION`
+
+**2. Paragraph title (Arial 10px bold, ALL CAPS, `#A73A64` magenta — brand rule applies on white background):**
+```
+font-family: Arial, Helvetica, sans-serif; font-size: 10px;
+font-weight: bold; text-transform: uppercase; letter-spacing: 2px;
+color: #A73A64; margin: 0 0 8px 0;
+```
+Text: `FREE C5 THRESHOLD`
+
+**3. Section headline (Arial bold, ALL CAPS, 22px, `#008578`):**
+```
+font-family: Arial, Helvetica, sans-serif;
+font-size: 22px; font-weight: bold;
+text-transform: uppercase; color: #008578;
+line-height: 1.2; letter-spacing: 0.5px; margin: 0 0 10px 0;
+```
+Text: `IMMEDIATE, COMPLETE, AND SUSTAINED TERMINAL COMPLEMENT C5 INHIBITION THROUGH 26 WEEKS`
+
+**4. 4px `#008578` decorative rule, 80px wide:**
+```html
+<table width="80" cellpadding="0" cellspacing="0" border="0"
+       style="margin-bottom:16px;">
+  <tr>
+    <td height="4" bgcolor="#008578"
+        style="background-color:#008578; font-size:0;
+               line-height:0; mso-line-height-rule:exactly;">&nbsp;</td>
+  </tr>
+</table>
+```
+
+**5. Progressive disclosure TIER 1 — C5 inhibition KPI card (magazine breakout style, 520px, `#EEF3F8` ice-blue fill, `4px solid #008578` left border, `1px solid #5C88DA` other three sides — inherits Ref [1]'s left-bordered blockquote motif, brand-approved left-accent pattern):**
+
+```html
+<table width="520" cellpadding="0" cellspacing="0" border="0"
+       style="background-color:#EEF3F8;
+              border:1px solid #5C88DA;
+              border-left:4px solid #008578;
+              border-collapse:collapse;
+              margin-bottom:16px;">
+  <tr>
+    <td style="padding:20px 20px;">
+      <table width="480" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td width="220" valign="middle"
+              style="width:220px; padding-right:20px;
+                     text-align:center; vertical-align:middle;">
+            <p style="font-family:Arial,Helvetica,sans-serif; font-size:10px;
+               font-weight:bold; text-transform:uppercase; letter-spacing:2px;
+               color:#008578; margin:0 0 6px 0;">FREE C5 THRESHOLD</p>
+            <p style="font-family:Arial,Helvetica,sans-serif; font-size:48px;
+               font-weight:bold; color:#FF6A39; line-height:1;
+               letter-spacing:-1px; margin:0 0 2px 0;">&lt;0.5</p>
+            <p style="font-family:Arial,Helvetica,sans-serif; font-size:14px;
+               font-weight:bold; color:#3F4444; margin:0 0 4px 0;">&#181;g/mL</p>
+            <p style="font-family:Arial,Helvetica,sans-serif; font-size:11px;
+               font-weight:normal; color:#3F4444; line-height:1.4; margin:0;">
+               complete C5 inhibition<sup style="font-size:9px; line-height:0;
+               vertical-align:super;">1</sup>
+            </p>
+          </td>
+          <td width="260" valign="middle"
+              style="width:260px; border-left:1px solid #5C88DA;
+                     padding-left:20px; vertical-align:middle;">
+            <p style="font-family:Arial,Helvetica,sans-serif; font-size:13px;
+               font-weight:bold; color:#103F66; line-height:1.4;
+               margin:0 0 10px 0;">
+               Achieved in ALL treated patients:</p>
+            <p style="font-family:Arial,Helvetica,sans-serif; font-size:12px;
+               font-weight:normal; color:#3F4444; line-height:1.5;
+               margin:0 0 6px 0;">
+               &#8226;&nbsp;By end of initial infusion<sup style="font-size:9px;
+               line-height:0; vertical-align:super;">1</sup>
+            </p>
+            <p style="font-family:Arial,Helvetica,sans-serif; font-size:12px;
+               font-weight:normal; color:#3F4444; line-height:1.5;
+               margin:0 0 6px 0;">
+               &#8226;&nbsp;Maintained through 26 weeks<sup style="font-size:9px;
+               line-height:0; vertical-align:super;">1</sup>
+            </p>
+            <p style="font-family:Arial,Helvetica,sans-serif; font-size:12px;
+               font-weight:normal; color:#3F4444; line-height:1.5; margin:0;">
+               &#8226;&nbsp;Supports 8&#8209;week dosing interval<sup
+               style="font-size:9px; line-height

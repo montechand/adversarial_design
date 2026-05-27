@@ -1,0 +1,275 @@
+# HTML Email Design Spec — Candidate 2
+## "Empowering Split Authority: Hero-Left / Text-Right at 40/60 with Extreme Typographic Scale, Low Density, Warm Credibility Palette"
+
+---
+
+## CONCEPT & DIFFERENTIATION STRATEGY
+
+This spec executes a **persistent hero-left / text-right split column architecture** at a strict 40/60 ratio (240px / 360px) within the 600px content width. Every section maintains this structural DNA. The left column carries one bold visual element per section — a massive numeral, a tight clinical label, or a stark geometric accent block — while the right column carries the headline and terse body copy. This creates a **two-register reading experience**: scanners read the left column vertically (numerals and labels) while deliberate readers engage the right column narrative. This is the polar opposite of the baseline's monotonous heading→paragraph→data-grid→footnote cadence.
+
+**Forced Axis: Hero-left text-right split, 40/60 ratio.** The left column (240px) acts as a persistent visual "spine" — it carries the data hero at extreme scale. The right column (360px) carries copy. This is maintained through Sections 1–7 with section-specific left-column content. The sole deviation is the ISI block (full-width, regulatory requirement) and the REMS panel (full-width per brand rule). The brand-rule exemption for the QMG responder row renders as two equal sub-cells within the right column only.
+
+**Forced Axis: Warm credibility — deep burgundy `#6B1A2A` + warm off-white `#FAF7F2` + antique gold `#B8860B`.** The header is a full-bleed `#6B1A2A` burgundy band. Alternating section left-column backgrounds use `#6B1A2A` (dark) and `#FAF7F2` (warm off-white) to create a chevron-stripe visual rhythm down the spine. Gold `#B8860B` appears exclusively as rule lines, border accents, and the left-column background on Sections 2 and 5. Brand violet `#4B2D8F` is used precisely for headlines, CTA button, data numerals, and callout borders per brand rules. This directly counters the baseline weakness: **"Monotonous section rhythm — every block follows an identical heading → paragraph → data grid → footnote pattern."** The alternating left-column color field creates an immediately distinct visual cadence with no extra content.
+
+**Forced Axis: Geometric sans with extreme size contrast — 48px / 14px.** Left-column hero numerals render at 48px bold in `#4B2D8F` (brand violet, brand rule) on warm off-white, or `#FFFFFF` on burgundy backgrounds. Right-column body copy renders at exactly 14px, `font-weight: 400`, `color: #222222`. This 48:14 ratio produces maximum scale drama within a single section row. No other element in the email approaches 48px except the primary endpoint numeral — which enforces hierarchy at scan speed. System font stack: `Arial, Helvetica, sans-serif` throughout (no external font imports per brand rule). The scale contrast directly counters the baseline weakness: **"System-stack Arial/Helvetica throughout, creating a generic utilitarian feel with no typographic distinction — the rhythm is metronomic."**
+
+**Forced Axis: Hero CTA only, minimal interruption.** A single CTA appears in Section 7 only — a full-width burgundy `#6B1A2A` band at the base of the content column, containing one bold action button in brand violet `#4B2D8F`. No mid-scroll CTA, no repeated buttons, no secondary links styled as buttons. The CTA renders as an unmissable architectural terminus rather than an interruption, using the deepest color in the email to signal finality.
+
+**Forced Axis: Low density — one claim per section, lots of whitespace, ISI below fold.** Each section's right column carries exactly one headline (the primary claim) and one paragraph (maximum 2 sentences, per brand rule). Data numerals and labels in the left column carry the quantitative load. ISI is a completely separate section below a full-width `#E5E7EB` divider at the very bottom. The left-column width naturally limits copy sprawl, enforcing low density.
+
+**Forced Axis: Empowering patient outcomes narrative.** Every right-column headline leads with the clinical outcome benefit first (brand rule: data claim before endpoint name). The framing acknowledges patients behind the data — "your patients with anti-AChR+ gMG" — without using warm conversational tone (brand rule: terse clinical copy).
+
+**Counter to baseline weakness: "Complete absence of imagery — no hero banner, no brand mark in header."** The header band is a full-width `#6B1A2A` burgundy strip containing the ULTOMIRIS logo placeholder `[images_base64_1]` left-aligned and the Alexion AstraZeneca Rare Disease wordmark right-aligned, separated by a `2px solid #B8860B` gold bottom rule. The brand is established in the first 80px of the email.
+
+**Counter to baseline weakness: "No visual header or brand identity presence."** The persistent 240px left-column spine, alternating between `#6B1A2A` and `#FAF7F2`, creates a designed visual identity system that runs the full length of the email — every scroll position shows the brand color architecture.
+
+**Counter to baseline weakness: "CTA button is buried after ~1800px of scrolling content."** The single CTA is placed in a visually distinct terminus band — the darkest element in the lower half — with a full 36px top padding of whitespace above it, pulling the reader's eye as the scroll slows.
+
+---
+
+## LAYOUT ARCHITECTURE
+
+### Overall Structure
+
+- **Outer wrapper table:** `<table width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: #EDE8E0;">` — warm greige outer canvas, 100% width
+- **Inner content table:** `<table width="600" cellpadding="0" cellspacing="0" border="0" align="center" style="margin: 0 auto; background-color: #FAF7F2;">` — 600px centered content column
+- **Split column architecture:** Every section (§1–§7) is a `<tr>` containing:
+  - `<td width="240" ...>` LEFT COLUMN — visual/data spine
+  - `<td width="360" ...>` RIGHT COLUMN — headline + copy
+  - These cells never have internal margins that reduce effective column width below the declared widths
+- **Sole full-width exceptions:** Header band, gold rule bars, REMS panel, CTA section, Signature, ISI
+- **Font stack:** `Arial, Helvetica, sans-serif` everywhere — no external font imports, no @import (brand rule)
+- **CSS approach:** Inline styles on every element. `<style>` block in `<head>` contains ONLY:
+  ```css
+  body { margin: 0; padding: 0; background-color: #EDE8E0; }
+  a { color: #4B2D8F; text-decoration: underline; }
+  img { display: block; border: 0; }
+  table { border-collapse: collapse; }
+  ```
+  No class-based layout rules. No external fonts. No CSS Grid. No Flexbox.
+- **All images:** `[images_base64_N]` placeholder tokens. Every `<img>` carries `alt=""` descriptive text, `border="0"`, `style="display:block;"`.
+
+---
+
+## COLOR PALETTE
+
+| Role | Hex | Usage |
+|---|---|---|
+| Deep burgundy | `#6B1A2A` | Header band, left-column alternating fill (Sections 1, 3, 6), CTA terminus band background, signature top border |
+| Antique gold | `#B8860B` | Header bottom rule (2px), left-column fill on Sections 2 and 5, gold rule bars between major transitions, overline rule accents |
+| Warm off-white | `#FAF7F2` | Inner content table background, left-column fill on Sections 4, 7, right-column fill throughout |
+| Warm greige canvas | `#EDE8E0` | Outer wrapper background |
+| White | `#FFFFFF` | Right-column copy areas within dark-left sections, detail expansion fields |
+| Brand violet | `#4B2D8F` | Section headlines (H2), CTA button background, all data callout numerals, left-border on PD callout — BRAND RULE SUPREME |
+| Light violet tint | `#F5F1FC` | Data callout cell backgrounds — BRAND RULE |
+| Soft violet-grey border | `#D8C9F0` | Callout cell borders — BRAND RULE |
+| Charcoal body text | `#222222` | All body copy on light backgrounds — BRAND RULE |
+| White on dark | `#FFFFFF` | All text on `#6B1A2A` and `#4B2D8F` backgrounds |
+| Gold warm text | `#E8C97A` | Subtext/overlines on burgundy `#6B1A2A` backgrounds |
+| REMS amber background | `#FFF8E1` | Meningococcal REMS panel — BRAND RULE, exclusive |
+| REMS amber border | `#FFD54F` | REMS panel border — BRAND RULE |
+| REMS amber text | `#7B5A00` | REMS panel body text — BRAND RULE |
+| ISI / reference text | `#333333` | ISI block, footnotes — BRAND RULE, exactly 10px |
+| Section divider | `#E5E7EB` | 1px bottom border on every section row — BRAND RULE |
+| Superscript citation | `#333333` | Inline trial citation superscripts at 8px |
+
+**COLOR PROHIBITIONS (Brand Rules):**
+- NEVER use `#4B2D8F` as body text color on white
+- NEVER reuse amber palette (`#FFF8E1`, `#FFD54F`, `#7B5A00`) outside the REMS panel
+- No gradients — flat color only throughout
+- NEVER use burgundy or gold as body text on white (accessibility)
+
+---
+
+## TYPOGRAPHY SYSTEM
+
+| Element | Family | Size | Weight | Color | Letter-spacing | Line-height |
+|---|---|---|---|---|---|---|
+| Header logo sub-label | Arial, sans-serif | 10px | 400 | `#E8C97A` | 2px | 1.4 |
+| Header company name | Arial, sans-serif | 10px | 700 | `#E8C97A` | 2px | 1.5 |
+| Left-column overline label (light bg) | Arial, sans-serif | 10px | 700 | `#6B1A2A` | 3px | 1.2 |
+| Left-column overline label (dark bg) | Arial, sans-serif | 10px | 700 | `#E8C97A` | 3px | 1.2 |
+| Left-column overline label (gold bg) | Arial, sans-serif | 10px | 700 | `#FFFFFF` | 3px | 1.2 |
+| **Hero numeral — primary (Section 3)** | Arial, sans-serif | **48px** | 700 | `#4B2D8F` | -1px | 1.0 |
+| **Hero numeral — on dark left column** | Arial, sans-serif | **48px** | 700 | `#FFFFFF` | -1px | 1.0 |
+| Secondary numeral (Section 4 QMG) | Arial, sans-serif | 32px | 700 | `#4B2D8F` | 0 | 1.0 |
+| Secondary numeral (Section 5 PD) | Arial, sans-serif | 24px | 700 | `#FFFFFF` | 0 | 1.0 |
+| Numeral unit suffix | Arial, sans-serif | 12px | 400 | `#6B1A2A` | 1px | 1.3 |
+| Numeral unit suffix (on dark) | Arial, sans-serif | 12px | 400 | `#E8C97A` | 1px | 1.3 |
+| Section headline (right column) | Arial, sans-serif | 18px | 700 | `#4B2D8F` | 0 | 1.3 |
+| Greeting headline | Arial, sans-serif | 18px | 700 | `#4B2D8F` | 0 | 1.3 |
+| Body copy | Arial, sans-serif | 14px | 400 | `#222222` | 0 | 1.5 |
+| Body copy on dark bg right col | Arial, sans-serif | 14px | 400 | `#FFFFFF` | 0 | 1.5 |
+| Responder callout numeral | Arial, sans-serif | 22px | 700 | `#4B2D8F` | 0 | 1.0 |
+| Responder callout label | Arial, sans-serif | 11px | 400 | `#222222` | 0 | 1.4 |
+| CTA headline text | Arial, sans-serif | 16px | 700 | `#FFFFFF` | 0 | 1.3 |
+| CTA button text | Arial, sans-serif | 14px | 700 | `#FFFFFF` | 1.5px | 1.0 |
+| Signature body | Arial, sans-serif | 13px | 400 | `#222222` | 0 | 1.5 |
+| ISI / footnote | Arial, sans-serif | 10px | 400 | `#333333` | 0 | 1.4 |
+| Superscript citation | Arial, sans-serif | 8px | 400 | `#333333` | 0 | — |
+| Gold rule bar | — | 2px height | — | `#B8860B` | — | — |
+
+**`text-transform: uppercase` applied to:** all left-column overline labels, CTA button text.
+
+---
+
+## SECTION-BY-SECTION DESIGN DECISIONS
+
+---
+
+### HEADER BAND (Pre-Section 1 — Brand Identification)
+
+**Full-width, not split. Counters baseline weakness: "No brand logo lockup anywhere in the email."**
+
+**Outer structure:** A single `<tr>` inside the inner content table. One `<td width="600" style="background-color: #6B1A2A; padding: 20px 28px 16px 28px; border-bottom: 2px solid #B8860B;">`.
+
+**Inner nested layout:** `<table width="544" cellpadding="0" cellspacing="0" border="0">`, single `<tr>`:
+
+- **LEFT `<td style="width: 300px; vertical-align: middle;">`:**
+  - `<img src="[images_base64_1]" alt="ULTOMIRIS® (ravulizumab-cwvz) logo" width="176" height="auto" border="0" style="display: block; max-width: 176px;">`
+  - Below logo: `<span style="display: block; margin-top: 6px; font-size: 10px; font-weight: 400; color: #E8C97A; letter-spacing: 2px; font-family: Arial, Helvetica, sans-serif; text-transform: uppercase; line-height: 1.4;">For Adults · Anti-AChR+ gMG</span>`
+
+- **RIGHT `<td style="vertical-align: middle; text-align: right;">`:**
+  - `<span style="font-size: 10px; font-weight: 700; color: #E8C97A; letter-spacing: 2px; font-family: Arial, Helvetica, sans-serif; text-transform: uppercase; display: block; line-height: 1.5;">ALEXION<br>ASTRAZENECA<br>RARE DISEASE</span>`
+
+The `2px solid #B8860B` gold bottom border on the outer `<td>` acts as an editorial chapter rule — the transition from brand identity to clinical content.
+
+---
+
+### GOLD RULE BAR COMPONENT (reusable pattern)
+
+Used after Header, after Section 3, after Section 5:
+
+```
+<table width="600" cellpadding="0" cellspacing="0" border="0">
+  <tr>
+    <td style="background-color: #B8860B; height: 2px; font-size: 0;
+               line-height: 0; padding: 0;">&nbsp;</td>
+  </tr>
+</table>
+```
+
+---
+
+### SECTION 1 — GREETING (Blueprint §1)
+
+**Split: 40/60. Left column: burgundy `#6B1A2A` with gold initialism. Right column: off-white `#FAF7F2`.**
+
+**Outer row structure:**
+`<table width="600" cellpadding="0" cellspacing="0" border="0">`, `<tr>`, then two `<td>` cells:
+
+**LEFT COLUMN `<td width="240" style="background-color: #6B1A2A; padding: 32px 20px 32px 24px; vertical-align: middle;">`:**
+- Overline: `<span style="display: block; font-size: 10px; font-weight: 700; color: #E8C97A; letter-spacing: 3px; font-family: Arial, Helvetica, sans-serif; text-transform: uppercase; line-height: 1.2; margin-bottom: 14px;">Specialist<br>Communication</span>`
+- Large decorative initialism acting as section anchor — the letters "NM" (Neuromuscular) rendered at 48px, `font-weight: 700`, `color: #FFFFFF`, `font-family: Arial, Helvetica, sans-serif`, `line-height: 1.0`. This creates the 48px / 14px size contrast on the very first section — establishing the typographic register immediately.
+- Below initialism: `<span style="display: block; margin-top: 8px; font-size: 10px; font-weight: 400; color: #E8C97A; letter-spacing: 2px; font-family: Arial, Helvetica, sans-serif; text-transform: uppercase; line-height: 1.4;">Neuromuscular<br>Specialist</span>`
+
+**RIGHT COLUMN `<td width="360" style="background-color: #FAF7F2; padding: 32px 28px 32px 24px; vertical-align: middle; border-bottom: 1px solid #E5E7EB;">`:**
+- `<p style="font-size: 18px; font-weight: 700; color: #4B2D8F; font-family: Arial, Helvetica, sans-serif; line-height: 1.3; margin: 0 0 14px 0;">Dear Neuromuscular Specialist,</p>`
+- `<p style="font-size: 14px; font-weight: 400; color: #222222; font-family: Arial, Helvetica, sans-serif; line-height: 1.5; margin: 0;">This briefing presents evidence for ULTOMIRIS® (ravulizumab-cwvz) in adults with anti-AChR antibody–positive generalized myasthenia gravis (gMG), reviewed with your expertise managing this condition in mind.</p>`
+
+**LEFT column bottom border:** `border-bottom: 1px solid #3D0E18` (slightly lighter than `#6B1A2A`, creates a subtle internal divider on the dark field without competing with the gold rule bars).
+
+---
+
+### SECTION 2 — INTRO (Blueprint §2)
+
+**Split: 40/60. Left column: antique gold `#B8860B` with "C5" mechanistic anchor. Right column: white `#FFFFFF`.**
+
+**Left column background `#B8860B` signals mechanistic/background register — gold = supporting context, not a primary efficacy claim.**
+
+**LEFT COLUMN `<td width="240" style="background-color: #B8860B; padding: 32px 20px 32px 24px; vertical-align: middle; border-bottom: 1px solid #E5E7EB;">`:**
+- Overline: `<span style="display: block; font-size: 10px; font-weight: 700; color: #FFFFFF; letter-spacing: 3px; font-family: Arial, Helvetica, sans-serif; text-transform: uppercase; line-height: 1.2; margin-bottom: 14px;">Long-Acting<br>C5 Inhibitor</span>`
+- Hero anchor at 48px: `<span style="display: block; font-size: 48px; font-weight: 700; color: #FFFFFF; font-family: Arial, Helvetica, sans-serif; line-height: 1.0; letter-spacing: -1px;">C5</span>`
+- Below: `<span style="display: block; margin-top: 6px; font-size: 10px; font-weight: 700; color: #FFFFFF; letter-spacing: 2px; font-family: Arial, Helvetica, sans-serif; text-transform: uppercase; line-height: 1.4;">Complement<br>Inhibition</span>`
+- Below: `<span style="display: block; margin-top: 10px; font-size: 12px; font-weight: 400; color: #FFFFFF; font-family: Arial, Helvetica, sans-serif; line-height: 1.4;">26-Week Trial<br>N=175 Adults</span>`
+
+**RIGHT COLUMN `<td width="360" style="background-color: #FFFFFF; padding: 32px 28px 32px 24px; vertical-align: middle; border-bottom: 1px solid #E5E7EB;">`:**
+- Headline: `<p style="font-size: 18px; font-weight: 700; color: #4B2D8F; font-family: Arial, Helvetica, sans-serif; line-height: 1.3; margin: 0 0 14px 0;">A long-acting complement option for appropriate adults with anti&#8209;AChR+ gMG</p>`
+- Body: `<p style="font-size: 14px; font-weight: 400; color: #222222; font-family: Arial, Helvetica, sans-serif; line-height: 1.5; margin: 0 0 12px 0;">ULTOMIRIS® (ravulizumab-cwvz) is the first and only long-acting complement C5 inhibitor approved for adults with anti-AChR antibody–positive gMG.</p>`
+- Body 2: `<p style="font-size: 14px; font-weight: 400; color: #222222; font-family: Arial, Helvetica, sans-serif; line-height: 1.5; margin: 0;">The CHAMPION-MG randomized, double-blind, placebo-controlled 26-week trial provides the evidentiary basis for the outcomes reviewed below.</p>`
+
+**After Section 2 — GOLD RULE BAR:** Insert the 2px `#B8860B` full-width rule (see reusable component above).
+
+---
+
+### SECTION 3 — PRIMARY EFFICACY MG-ADL (Blueprint §3)
+
+**Split: 40/60. Left column: warm off-white `#FAF7F2` with 48px violet hero numeral. Right column: white `#FFFFFF`.**
+
+**Counters baseline weakness: "Data visualization is limited to numeric text in colored cells."** The 48px numeral in the fixed left column creates a data landmark visible at any scroll speed — the number IS the visualization. This is the visual apex of the email: largest numeral, lightest background, brand violet — conforming exactly to the brand rule "Primary efficacy section (MG-ADL) is the visual apex: largest numeral on the page (min 36px, bold 700), rendered in primary violet #4B2D8F against the lightest background."
+
+**Outer wrapper:** `<table width="600" cellpadding="0" cellspacing="0" border="0">`. This section uses a `6px solid #6B1A2A` top border on the LEFT column only to signal primary endpoint status. The right column top has `6px solid #4B2D8F` to echo the brand violet hierarchy signal.
+
+**LEFT COLUMN `<td width="240" style="background-color: #FAF7F2; padding: 36px 20px 36px 24px; vertical-align: middle; border-top: 6px solid #6B1A2A; border-bottom: 1px solid #E5E7EB;">`:**
+- Overline: `<span style="display: block; font-size: 10px; font-weight: 700; color: #6B1A2A; letter-spacing: 3px; font-family: Arial, Helvetica, sans-serif; text-transform: uppercase; line-height: 1.2; margin-bottom: 12px;">Primary<br>Endpoint</span>`
+- **Hero numeral at 48px (brand rule: primary endpoint only, largest on page):**
+  ```html
+  <span style="display: block; font-size: 48px; font-weight: 700;
+               color: #4B2D8F; font-family: Arial, Helvetica, sans-serif;
+               line-height: 1.0; letter-spacing: -1px;">&#8722;3.1</span>
+  ```
+- Suffix: `<span style="display: block; margin-top: 4px; font-size: 12px; font-weight: 400; color: #6B1A2A; letter-spacing: 1px; font-family: Arial, Helvetica, sans-serif; text-transform: uppercase; line-height: 1.3;">pts MG-ADL</span>`
+- Comparator: `<span style="display: block; margin-top: 6px; font-size: 13px; font-weight: 700; color: #222222; font-family: Arial, Helvetica, sans-serif; line-height: 1.4;">vs &#8722;1.4 pts<br>placebo</span>`
+- P-value: `<span style="display: block; margin-top: 6px; font-size: 11px; font-weight: 400; color: #6B1A2A; font-family: Arial, Helvetica, sans-serif; line-height: 1.3;">P&lt;0.001<sup style="font-size: 8px; color: #333333; font-family: Arial, Helvetica, sans-serif;">1</sup></span>`
+- Multiplier tag: `<span style="display: block; margin-top: 4px; font-size: 11px; font-weight: 700; color: #4B2D8F; font-family: Arial, Helvetica, sans-serif; line-height: 1.3;">&gt;2&#215; greater<br>improvement</span>`
+
+**RIGHT COLUMN `<td width="360" style="background-color: #FFFFFF; padding: 36px 28px 36px 24px; vertical-align: middle; border-top: 6px solid #4B2D8F; border-bottom: 1px solid #E5E7EB;">`:**
+- Overline: `<span style="display: block; font-size: 10px; font-weight: 700; color: #6B1A2A; letter-spacing: 3px; font-family: Arial, Helvetica, sans-serif; text-transform: uppercase; line-height: 1.2; margin-bottom: 10px;">MG-ADL Total Score · Week 26</span>`
+- Headline: `<p style="font-size: 18px; font-weight: 700; color: #4B2D8F; font-family: Arial, Helvetica, sans-serif; line-height: 1.3; margin: 0 0 14px 0;">More than 2&#215; greater MG&#8209;ADL improvement vs placebo at Week 26</p>`
+- Body: `<p style="font-size: 14px; font-weight: 400; color: #222222; font-family: Arial, Helvetica, sans-serif; line-height: 1.5; margin: 0 0 16px 0;">In the CHAMPION-MG trial (ULTOMIRIS® (ravulizumab-cwvz) n=86; placebo n=89), ULTOMIRIS achieved a greater mean improvement in MG-ADL total score at Week 26 (&#8722;3.1 vs &#8722;1.4 points; P&lt;0.001).<sup style="font-size: 8px; color: #333333; font-family: Arial, Helvetica, sans-serif;">1</sup></p>`
+
+- **Responder callout table (brand rule: two equal cells side-by-side, sole two-column pattern):**
+  This two-cell table lives entirely within the 360px right column. Each cell is `(360 - 24px left padding - 28px right padding - 2px borders) / 2 ≈ 153px`. Structure:
+
+  ```html
+  <table width="308" cellpadding="0" cellspacing="0" border="0"
+    style="background-color: #F5F1FC;
+           border: 1px solid #D8C9F0;
+           border-left: 4px solid #4B2D8F;">
+    <tr>
+      <td width="150"
+        style="padding: 12px 10px 12px 12px;
+               vertical-align: top;
+               border-right: 1px solid #D8C9F0;">
+        <span style="display: block; font-size: 22px; font-weight: 700;
+                     color: #4B2D8F;
+                     font-family: Arial, Helvetica, sans-serif;
+                     line-height: 1.0;">30%</span>
+        <span style="display: block; font-size: 11px; font-weight: 400;
+                     color: #222222;
+                     font-family: Arial, Helvetica, sans-serif;
+                     margin-top: 4px; line-height: 1.4;">ULTOMIRIS<br>responders<sup style="font-size: 8px; color: #333333; font-family: Arial, Helvetica, sans-serif;">1</sup></span>
+        <span style="display: block; font-size: 10px; font-weight: 400;
+                     color: #222222;
+                     font-family: Arial, Helvetica, sans-serif;
+                     margin-top: 3px; line-height: 1.4;">&#8805;3-pt improvement</span>
+      </td>
+      <td width="150"
+        style="padding: 12px 12px 12px 10px;
+               vertical-align: top;">
+        <span style="display: block; font-size: 22px; font-weight: 700;
+                     color: #4B2D8F;
+                     font-family: Arial, Helvetica, sans-serif;
+                     line-height: 1.0;">11%</span>
+        <span style="display: block; font-size: 11px; font-weight: 400;
+                     color: #222222;
+                     font-family: Arial, Helvetica, sans-serif;
+                     margin-top: 4px; line-height: 1.4;">Placebo<br>responders<sup style="font-size: 8px; color: #333333; font-family: Arial, Helvetica, sans-serif;">1</sup></span>
+        <span style="display: block; font-size: 10px; font-weight: 400;
+                     color: #222222;
+                     font-family: Arial, Helvetica, sans-serif;
+                     margin-top: 3px; line-height: 1.4;">&#8805;3-pt improvement</span>
+      </td>
+    </tr>
+  </table>
+  ```
+
+**After Section 3 — GOLD RULE BAR** (2px `#B8860B`, full 600px width).
+
+---
+
+### SECTION 4 — SECONDARY EFFICACY QMG (Blueprint §4)
+
+**Split: 40/60. Left column: burgundy `#6B1A2A` (dark) with 32px WHITE numeral. Right column: warm off-white `#FAF7F2`.**
+
+**Visual hierarchy logic:** Section 4 is subordinate to Section 3. The left column flips to burgundy dark background — the numeral appears in WHITE `#FFFFFF` at 32px (not 48px brand violet on white), signaling secondary status. The right column uses warm off-white (not

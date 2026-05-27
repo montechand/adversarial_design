@@ -1,0 +1,136 @@
+# config/pipeline_config.yaml
+
+pipeline:
+  k: 3                           # candidates per run (3-5 recommended)
+  iterations: 3                  # feedback loop iterations before stopping
+  max_compliance_retries: 2      # max creativizer retries on compliance failure
+
+  # How each candidate is produced:
+  #   "full_mjml"    (default) — ONE LLM call per candidate produces fragments
+  #                              for every section in one response, so design
+  #                              decisions (color hierarchy, typography, spacing,
+  #                              narrative arc) carry coherently across sections.
+  #   "section_wise" — N parallel LLM calls per candidate (one per section).
+  #                    Lower latency per candidate but designs often feel
+  #                    disjunctive across sections.
+  candidate_mode: "section_wise"
+
+  # Reference-creative-ad gallery cap. Each reference is interleaved with its
+  # caption into the reverse-prompter's BASELINE VLM call so the analyzer can
+  # ground the baseline's weaknesses against human-made benchmarks. Set to 0
+  # to disable references entirely without touching the examples directory.
+  max_references: 6
+
+# Multi-provider model selection.
+#
+# `reverse_prompter` and `creativizer` route through the multi-provider
+# router in `pipeline/utils/llm_clients.py` and support Anthropic, OpenAI,
+# and Google Gemini. Each entry can be either:
+#
+#   1. A bare string. The provider is detected from the prefix:
+#        creativizer: "claude-sonnet-4-6"     # → anthropic
+#        creativizer: "gpt-5.5"               # → openai
+#        creativizer: "gemini-2.5-pro"        # → google
+#      Or use an explicit-provider shortcut (any of /, :, - works as the
+#      separator; the prefix is stripped before the SDK sees the model id):
+#        creativizer: "openai/gpt-5.5"
+#        creativizer: "openai:gpt-5.5"
+#        creativizer: "openai-gpt-5.5"
+#        creativizer: "anthropic-claude-sonnet-4-6"
+#        creativizer: "google-gemini-2.5-pro"
+#
+#   2. An object form (explicit, supports per-node overrides):
+#        creativizer:
+#          provider: openai
+#          model: gpt-5.5
+#          temperature: 0.9                  # optional override
+#          thinking_effort: max              # optional per-node override
+#
+# Required env vars by provider:
+#   anthropic → ANTHROPIC_API_KEY
+#   openai    → OPENAI_API_KEY
+#   google    → GEMINI_API_KEY (GOOGLE_API_KEY also accepted)
+#
+# `thinking_effort_default` controls how hard each routed node reasons. It
+# maps onto each provider's native reasoning API:
+#   anthropic → adaptive thinking + `output_config.effort`
+#                  (max | xhigh* | high | medium | low | minimal | off)
+#                  *xhigh works only on Opus 4.7
+#   openai    → `reasoning_effort` (max/xhigh → high; high | medium | low | minimal)
+#                  applies to gpt-5+ and o-series; ignored on non-reasoning models
+#   google    → `thinking_config.thinking_budget` (max → -1 dynamic;
+#                  high=16384, medium=8192, low=2048, minimal=512;
+#                  clamped to model max — Pro=32768, Flash=24576)
+#
+# Setting "off" disables thinking where the provider/model allows it.
+# Use `max` for highest-quality reasoning on every provider (default).
+#
+# When thinking is enabled the router auto-raises max_tokens / max_output_tokens
+# so reasoning + visible output fit comfortably (Anthropic: 32k floor for high,
+# 64k for max; OpenAI: 16k/32k; Gemini: 16k/32k).
+#
+# The remaining nodes (code_generator, quality_judge, anti_ai_judge,
+# compliance_check) currently run on Anthropic only — their entries here
+# are advisory but not yet routed through the multi-provider client.
+models:
+  thinking_effort_default: max             # default reasoning depth for routed nodes
+
+  reverse_prompter: "claude-opus-4-6"      # VLM — needs vision + reasoning
+  # reverse_prompter: "openai/gpt-5.5"
+  creativizer:      "claude-sonnet-4-6"    # fast, good at instruction following
+  # creativizer:      "openai/gpt-5.5"
+  code_generator:   "claude-opus-4-7"    # strong at HTML generation
+  quality_judge:    "claude-opus-4-6"      # VLM — needs visual judgment
+  # quality_judge:    "openai/gpt-5.5"
+  anti_ai_judge:    "claude-opus-4-6"      # VLM — comparative reasoning
+  compliance_check: "claude-sonnet-4-6"    # fast gate, rule-based reasoning
+
+  # Temperature settings (higher = more creative, lower = more consistent).
+  # Note: OpenAI reasoning models ignore non-default temperature when
+  # `reasoning_effort` is set — the router omits temperature in that case.
+  creativizer_temperature:      0.9
+  code_generator_temperature:   0.7
+  judge_temperature:            0.2        # judges should be deterministic
+
+feedback:
+  # After iteration 0, attach the winner's judge rationale to the reverse
+  # prompter's baseline prompt so it can ground its weakness analysis in
+  # what actually worked in the previous round. Set to false to disable.
+  winner_feedback_to_reverse_prompter: true
+
+max_tokens:
+  reverse_prompter:      16000   # VLM call extracting design intent from the baseline
+  creativizer:          16000   # long-form design spec per candidate
+  code_generator_full:  16384   # full_mjml mode — all sections in one response
+  code_generator_section: 16384 # section_wise mode — one section per response
+  quality_judge:         10000   # pairwise visual scoring
+  anti_ai_judge:         10000   # AI-likeness ranking
+  compliance_check:       600   # MLR gate (short structured output)
+
+scoring:
+  quality_weight:  0.55
+  anti_ai_weight:  0.45
+
+  quality_dimensions:
+    creativity:     0.40
+    hcp_relevance:  0.35
+    layout:         0.25
+
+screenshotter:
+  viewport_width:  600           # standard email client width
+  full_page:       true
+
+# Async concurrency caps for the pipeline. Tune up on a beefy host, down on
+# a laptop to stay under Anthropic rate limits. All values are per-iteration.
+concurrency:
+  reverse_prompter: 4            # baseline + reference VLM calls in parallel
+  creativizer:      4            # k creativizer LLM calls in parallel
+  per_candidate:    3            # max candidates whose MJML flow runs concurrently
+  per_section:      6            # max per-section MJML LLM calls within ONE candidate
+  compliance:       4            # candidates checked in parallel
+  screenshotter:    2            # Playwright renders in parallel (heavy — keep low)
+
+storage:
+  runs_dir:          "storage/runs"
+  base_prompt_path:  "storage/base_prompt.txt"
+  prompt_history:    "storage/prompt_history.jsonl"

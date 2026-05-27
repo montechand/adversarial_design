@@ -1,0 +1,101 @@
+{
+  "_comment": "Sample blueprint shaped exactly like the backend `content_blueprint` (see Backend-Server/.../message_generator_from_scratch_v0_1.py line 693 `class SectionSpec`). Synthetic Opdivo-style HCP email for adjuvant NSCLC, used only for offline pipeline testing — no real patient/marketing data.",
+  "content_blueprint": [
+    {
+      "order": 1,
+      "section_id": "intro",
+      "type": "intro",
+      "intent": "Open with a credible greeting that frames why this HCP should read on.",
+      "general_allowed": true,
+      "claim_required": false,
+      "constraints": {"verbatim_text": "Dear Healthcare Professional,"},
+      "headline": "Dear Healthcare Professional,",
+      "copy_outline": "A short, professional greeting that signals this is an evidence-led update on adjuvant therapy choices in resected NSCLC, not a promotional blast.",
+      "clinical_fact_covered": "Greeting / framing only — no clinical claim."
+    },
+    {
+      "order": 2,
+      "section_id": "hero",
+      "type": "hero",
+      "intent": "Anchor the email on the headline benefit and the trial it comes from, with a clear visual hook.",
+      "general_allowed": false,
+      "claim_required": true,
+      "constraints": {},
+      "headline": "Adjuvant therapy that delayed recurrence in resected stage IB–IIIA NSCLC",
+      "copy_outline": "Pull the topline DFS benefit from the pivotal trial: hazard ratio with 95% CI, statistical significance, and the patient population. Pair with a hero image that conveys clinical confidence (chest CT motif, clinician-patient scene, or trial-arms data viz).",
+      "clinical_fact_covered": "Disease-free survival (DFS) benefit of adjuvant immunotherapy vs. placebo, pivotal Phase 3 readout."
+    },
+    {
+      "order": 3,
+      "section_id": "moa",
+      "type": "body",
+      "intent": "Reinforce mechanism of action — why this drug, biologically.",
+      "general_allowed": false,
+      "claim_required": true,
+      "constraints": {},
+      "headline": "Designed to restore T-cell anti-tumor activity",
+      "copy_outline": "Two-column layout: short MoA copy on one side and an illustrative MoA diagram on the other. Mention PD-1 / PD-L1 axis, T-cell reactivation, and tumor microenvironment effect. Use 1–2 short clinical sentences, not a paragraph.",
+      "clinical_fact_covered": "PD-1 pathway inhibition leads to restored T-cell activity against tumor cells."
+    },
+    {
+      "order": 4,
+      "section_id": "efficacy",
+      "type": "body",
+      "intent": "Show the efficacy data prominently — visually credible, scannable.",
+      "general_allowed": false,
+      "claim_required": true,
+      "constraints": {"data_callout_required": true},
+      "headline": "Significant DFS improvement vs. placebo in the ITT population",
+      "copy_outline": "Two or three data callout boxes: median DFS (drug arm), median DFS (placebo arm), and hazard ratio with 95% CI. Add a small Kaplan-Meier-style figure as an image asset. Each statistic carries a citation superscript.",
+      "clinical_fact_covered": "Median DFS values in both arms and the hazard ratio."
+    },
+    {
+      "order": 5,
+      "section_id": "safety",
+      "type": "body",
+      "intent": "Provide fair balance — common AEs and discontinuation rate visible alongside efficacy.",
+      "general_allowed": false,
+      "claim_required": true,
+      "constraints": {"fair_balance_required": true},
+      "headline": "Safety profile observed in the adjuvant setting",
+      "copy_outline": "List the top 3 treatment-related AEs (≥10% incidence) and the all-grade discontinuation rate. Keep the table visually equal in weight to the efficacy callouts — do not let it shrink into the footer.",
+      "clinical_fact_covered": "Most common treatment-related adverse events and discontinuation rates."
+    },
+    {
+      "order": 6,
+      "section_id": "isi",
+      "type": "body",
+      "intent": "Important Safety Information section — regulatory requirement.",
+      "general_allowed": true,
+      "claim_required": false,
+      "constraints": {"font_size_max_px": 10, "isi_required": true},
+      "headline": "IMPORTANT SAFETY INFORMATION",
+      "copy_outline": "Full required-language ISI placeholder text. Must include boxed warning (if any), contraindications, warnings/precautions, common AEs, and a link to the full Prescribing Information. Render at 10px, clearly delimited from preceding sections.",
+      "clinical_fact_covered": "Regulatory ISI placeholder."
+    },
+    {
+      "order": 7,
+      "section_id": "cta",
+      "type": "cta",
+      "intent": "One unambiguous next step for the HCP.",
+      "general_allowed": true,
+      "claim_required": false,
+      "constraints": {"max_cta_count": 1},
+      "headline": "Review the full prescribing information",
+      "copy_outline": "Single solid CTA button — brand-color background, white text — linking to the PI. Avoid stacking secondary CTAs.",
+      "clinical_fact_covered": "PI access."
+    },
+    {
+      "order": 8,
+      "section_id": "closing",
+      "type": "closing",
+      "intent": "Short professional closing and references block.",
+      "general_allowed": true,
+      "claim_required": false,
+      "constraints": {},
+      "headline": "References",
+      "copy_outline": "Numbered references corresponding to the superscript citations in the efficacy and hero sections. 10px, neutral color, full citation format.",
+      "clinical_fact_covered": "Reference list."
+    }
+  ]
+}
